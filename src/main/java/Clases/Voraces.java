@@ -4,26 +4,53 @@
  */
 package Clases;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author raulp
  */
 public class Voraces {
 
-    public int[] vorazuni(puntos p[], int ini){
-        boolean visitados = new boolean[p.lenght()];//inicialiazar con false todas las celdas con un for
-        int ruta = new int[p.lenght+1];
-        ruta[0] = ini;
-        visitados[ini] = true;
-        for(int i = 1; i<p.lenght; i++){
-            ini = ciudadMasCercana(p, visitados, ini);//ini ciudad mas cercana
-            ruta[i] = ini;
-            visitados[ini] = true;
-        }
-        ruta[i] = ruta[0];
+    public static double distancia(Punto a, Punto b) {
+        double x = Math.abs(a.getX() - b.getX());
+        double y = Math.abs(a.getY() - b.getY());
+
+        return (double) Math.sqrt((x * x) + (y * y));
+    }
+    private Punto p;
+    private double dmin = Integer.MAX_VALUE;
+
+    public ArrayList<Punto> vorazuni(ArrayList<Punto> puntos, int ini) {
+        ArrayList<Punto> visitados = new ArrayList<Punto>();
+        ArrayList<Punto> novisitados = (ArrayList<Punto>) puntos.clone();
+        visitados.add(novisitados.get(ini));
         
+        for (int i = 0; i < novisitados.size(); i++) {
+            p=ciudadCercana(novisitados, ini);
+            visitados.add(p);
+            ini=novisitados.
+        }
+        
+      
         return ruta;
     }
+
+    public Punto ciudadCercana(ArrayList<Punto> novisitados, int ini){
+         double distanciapuntos;
+         Punto puntos;
+         for (int i = 0; i < novisitados.size(); i++) {
+             distanciapuntos= distancia(novisitados.get(ini), novisitados.get(i));
+            if (distanciapuntos <= dmin) {
+                dmin=distanciapuntos;
+                 puntos=novisitados.get(i);
+            }
+        }
+         novisitados.remove(ini);
+        
+        return p;
+    
+    }/*
     
         public int[] vorazuniPoda(puntos p[], int ini){
         Punto pini = p[ini];
@@ -73,5 +100,5 @@ public class Voraces {
             }
         }
         return d;
-    }
+    }*/
 }

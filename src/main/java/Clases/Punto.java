@@ -30,10 +30,7 @@ public class Punto {
         this.y = y;
     }
     
-    public static double distancia(Punto a, Punto b){
-        double d = Math.sqrt((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y));
-        return d;
-    }
+  
     
     public double getX(){
         return x;
