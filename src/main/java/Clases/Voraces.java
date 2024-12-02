@@ -10,7 +10,7 @@ package Clases;
  */
 public class Voraces {
 
-    /*public int[] vorazuni(puntos p[], int ini){
+    public int[] vorazuni(puntos p[], int ini){
         boolean visitados = new boolean[p.lenght()];//inicialiazar con false todas las celdas con un for
         int ruta = new int[p.lenght+1];
         ruta[0] = ini;
@@ -73,5 +73,5 @@ public class Voraces {
             }
         }
         return d;
-    }*/
+    }
 }
