@@ -1,18 +1,14 @@
 package Vistas;
 
-import Clases.Algoritmos;
-import Clases.Graficas;
-import Clases.Lectura;
-import Clases.Menus;
-import Clases.Mostrar;
+
+
 import Clases.Punto;
+import Clases.Voraces;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class MainAppGUI extends JFrame {
-
+/*
     private int talla;
     private boolean peorcaso = false;
     private ArrayList<Punto> puntos = new ArrayList<>();
@@ -339,11 +335,53 @@ public class MainAppGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Error en la opción 8: " + e.getMessage());
         }
     }
-
+*/
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainAppGUI frame = new MainAppGUI();
-            frame.setVisible(true);
-        });
+                Voraces v=new Voraces();
+        ArrayList<Punto> l=new ArrayList<>();
+        ArrayList<Punto> b;
+        
+            Punto p=new Punto(1,0.375,0.951);
+            l.add(p);
+              Punto s=new Punto(2,0.732,0.599);
+            l.add(s);
+        
+              Punto d=new Punto(3,0.156,0.156);
+            l.add(d);
+        
+              Punto q=new Punto(4,0.058,0.866);
+            l.add(q);
+        
+              Punto px=new Punto(5,0.601,0.708);
+            l.add(px);
+        
+        
+
+        for (int i = 0; i < 5; i++) {
+            System.out.println(l.get(i).getX()+"            "+l.get(i).getY());
+        
+        }
+        System.out.println("Ruta Unidirecional");
+       b= v.vorazUnidireccional(l);
+       
+       // v.quicksort(l, 0, l.size()-1);
+       
+          for (int i = 0; i < 5; i++) {
+            System.out.println(b.get(i).getX()+"            "+b.get(i).getY());
+        
+        }
+          System.out.println("Ruta UnidirecionalPoda");
+          b=v.vorazUnidireccionalPoda(l);
+       
+       // v.quicksort(l, 0, l.size()-1);
+       
+          for (int i = 0; i < 5; i++) {
+            System.out.println(b.get(i).getX()+"            "+b.get(i).getY());
+        
+        } 
+          
+          
+          
+          
     }
 }
