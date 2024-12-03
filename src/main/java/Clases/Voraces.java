@@ -26,8 +26,7 @@ public class Voraces {
     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         Random r = new Random();
-        int posAlea = r.nextInt(ciudades.size()), posIzq, posDer,
-                extremoIzq, extremoDer;
+        int posAlea = r.nextInt(ciudades.size()), posIzq, posDer, extremoIzq, extremoDer;
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
         visitadas[posAlea] = true;
