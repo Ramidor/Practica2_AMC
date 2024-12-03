@@ -5,6 +5,8 @@
 package Clases;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  *
@@ -39,8 +41,8 @@ public class Voraces {
             if (ruta.get(posIzq) != ruta.get(posDer)) {
                 extremoIzq = ciudadMasCercana(ruta.get(posIzq), ciudades,
                         visitadas);
-                if (distancia2(ciudades.get(extremoIzq), ruta.get(posIzq))
-                        < distancia2(ciudades.get(extremoDer), ruta.get(posDer))) {
+                if (distancia(ciudades.get(extremoIzq), ruta.get(posIzq))
+                        < distancia(ciudades.get(extremoDer), ruta.get(posDer))) {
                     visitadas[extremoIzq] = true;
                     posIzq++;
                     posDer++;
@@ -63,7 +65,7 @@ public class Voraces {
 
         for (int i = 0; i < ciudades.size(); i++) {
             if (!visitadas[i]) {
-                double distancia = distancia2(origen, ciudades.get(i));
+                double distancia = distancia(origen, ciudades.get(i));
                 if (distancia < minima) {
                     minima = distancia;
                     posicion = i;
@@ -74,56 +76,6 @@ public class Voraces {
         return posicion;
     }
 
-    /*
-    
-        public int[] vorazuniPoda(puntos p[], int ini){
-        Punto pini = p[ini];
-        //ordenar p por eje x
-        ini = buscar(p, pini);
-        boolean visitados = new boolean[p.lenght()];//inicialiazar con false todas las celdas con un for
-        int ruta = new int[p.lenght + 1];
-        ruta[0] = ini;
-        visitados[ini] = true;
-        for (int i = 1; i < p.lenght; i++) {
-            ini = ciudadMasCercanaPoda(p, visitados, ini);//ini ciudad mas cercana
-            ruta[i] = ini;
-            visitados[ini] = true;
-        }
-        ruta[i] = ruta[0];
-
-        return ruta;
-    }
-
-    public int ciudadMasCercana(puntos p[], boolean v[], int ini) {
-        double dist, dmin = Double.MAX_VALUE;
-        int d = -1;
-        for (int i = 0; i < p.length(); i++) {
-            if (i != ini && v[i] == false) {
-                dist = distancia(p[ini], p[i]);
-                if (dist < dmin) {
-                    dmin = dist;
-                    d = i;
-                }
-            }
-        }
-        return d;
-    }
-
-    //debe buscar a derecha e izquierda, adaptar el poda que tenemos
-    public int ciudadMasCercanaPoda(puntos p[], boolean v[], int ini) {
-        double dist, dmin = Double.MAX_VALUE;
-        int d = -1;
-        for (int i = 0; i < p.length(); i++) {
-            if (i != ini && v[i] == false) {
-                dist = distancia(p[ini], p[i]);
-                if (dist < dmin) {
-                    dmin = dist;
-                    d = i;
-                }
-            }
-        }
-        return d;
-    }*/
     public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
