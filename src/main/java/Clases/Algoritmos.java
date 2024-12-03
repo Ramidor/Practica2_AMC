@@ -67,35 +67,7 @@ public class Algoritmos {
         return p;
     }
 
-    public PuntosMin BusquedaExahustiva11(List<Punto> puntos, int inicio, int fin) {
 
-        PuntosMin p = new PuntosMin(puntos.get(0), puntos.get(1));
-        double dmin = p.getDistancia();
-        cont++;
-        op += 9;
-        for (int i = inicio; i < fin; i++) {
-            op += 8;
-            for (int j = i + 1; j < fin; j++) {
-                op += 4;
-                if ((puntos.get(j).getX() - puntos.get(i).getX()) < dmin && j <= i + 11) {
-                    double d = distancia(puntos.get(i), puntos.get(j));
-                    cont++;
-                    op += 3;
-                    if (d < dmin) {
-                        dmin = d;
-                        p.punt(puntos.get(i), puntos.get(j));
-                        op += 2;
-                    }
-                } else {
-                    j = fin; //o ponemos break y al carajo
-                    op++;
-                }
-                op += 8;
-            }
-            op += 4;
-        }
-        return p;
-    }
 
     //MODIFICACION EN CLASE
     public static PuntosMin BusquedaPoda(List<Punto> puntos, int inicio, int fin) {

@@ -28,8 +28,8 @@ public class Punto {
         this.x = x;
         this.y = y;
     }
-
-    public double getX() {
+    
+    public double getX(){
         return x;
     }
 

@@ -5,7 +5,6 @@
 package Clases;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  *
@@ -13,24 +12,47 @@ import java.util.Random;
  */
 public class Voraces {
 
-    public ArrayList<Punto> vorazuni(ArrayList<Punto> p, int ini) {
-        ArrayList<Punto> visitados = new ArrayList<>();//inicialiazar con false todas las celdas con un for
-        ArrayList<Integer> ruta = new ArrayList<>();
-        visitados.sort((p1, p2) -> Double.compare(p1.getX(), p2.getX()));
-        visitados.
-        ruta[0] = ini;
-        visitados[ini] = true;
-        for (int i = 1; i < p.length; i++) {
-            ini = ciudadMasCercana(p, visitados, ini);//ini ciudad mas cercana
-            ruta[i] = ini;
-            visitados[ini] = true;
-        }
-        ruta[i] = ruta[0];
+    public static double distancia(Punto a, Punto b) {
+        double x = Math.abs(a.getX() - b.getX());
+        double y = Math.abs(a.getY() - b.getY());
 
+        return (double) Math.sqrt((x * x) + (y * y));
+    }
+    private Punto p;
+    private double dmin = Integer.MAX_VALUE;
+
+    public ArrayList<Punto> vorazuni(ArrayList<Punto> puntos, int ini) {
+        ArrayList<Punto> visitados = new ArrayList<Punto>();
+        ArrayList<Punto> novisitados = (ArrayList<Punto>) puntos.clone();
+        visitados.add(novisitados.get(ini));
+        
+        for (int i = 0; i < novisitados.size(); i++) {
+            p=ciudadCercana(novisitados, ini);
+            visitados.add(p);
+            ini=novisitados.
+        }
+        
+      
         return ruta;
     }
 
-    public int[] vorazuniPoda(puntos p[], int ini) {
+    public Punto ciudadCercana(ArrayList<Punto> novisitados, int ini){
+         double distanciapuntos;
+         Punto puntos;
+         for (int i = 0; i < novisitados.size(); i++) {
+             distanciapuntos= distancia(novisitados.get(ini), novisitados.get(i));
+            if (distanciapuntos <= dmin) {
+                dmin=distanciapuntos;
+                 puntos=novisitados.get(i);
+            }
+        }
+         novisitados.remove(ini);
+        
+        return p;
+    
+    }/*
+    
+        public int[] vorazuniPoda(puntos p[], int ini){
         Punto pini = p[ini];
         //ordenar p por eje x
         ini = buscar(p, pini);
@@ -77,24 +99,5 @@ public class Voraces {
             }
         }
         return d;
-    }
-
-    public ArrayList<Punto> rellenarPuntos(int n) {
-        ArrayList<Punto> p = new ArrayList<>();
-        int num, den;
-        double x, y, aux1;
-        Random r = new Random();
-        r.setSeed(System.currentTimeMillis()); // initialize random seed:
-
-        for (int i = 0; i < n; i++) {
-            num = r.nextInt(4000) + 1; //genera un número aleatorio entre 1 y 4000
-            den = r.nextInt(11) + 7; //genera un aleatorio entre 7 y 17
-            x = num / ((double) den + 0.37); //division con decimales
-            y = (r.nextInt(4000) + 1) / ((double) (r.nextInt(11) + 7) + 0.37);
-            Punto punto = new Punto(i + 1, x, y);
-            p.add(punto);
-        }
-
-        return p;
-    }
+    }*/
 }
