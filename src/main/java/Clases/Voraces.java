@@ -25,31 +25,30 @@ public class Voraces {
         ArrayList<Punto> visitados = new ArrayList<Punto>();
         ArrayList<Punto> novisitados = (ArrayList<Punto>) puntos.clone();
         visitados.add(novisitados.get(ini));
-        
+
         for (int i = 0; i < novisitados.size(); i++) {
-            p=ciudadCercana(novisitados, ini);
+            p = ciudadCercana(novisitados, ini);
             visitados.add(p);
-            ini=novisitados.
+            ini = novisitados.
         }
-        
-      
+
         return ruta;
     }
 
-    public Punto ciudadCercana(ArrayList<Punto> novisitados, int ini){
-         double distanciapuntos;
-         Punto puntos;
-         for (int i = 0; i < novisitados.size(); i++) {
-             distanciapuntos= distancia(novisitados.get(ini), novisitados.get(i));
+    public Punto ciudadCercana(ArrayList<Punto> novisitados, int ini) {
+        double distanciapuntos;
+        Punto puntos;
+        for (int i = 0; i < novisitados.size(); i++) {
+            distanciapuntos = distancia(novisitados.get(ini), novisitados.get(i));
             if (distanciapuntos <= dmin) {
-                dmin=distanciapuntos;
-                 puntos=novisitados.get(i);
+                dmin = distanciapuntos;
+                puntos = novisitados.get(i);
             }
         }
-         novisitados.remove(ini);
-        
+        novisitados.remove(ini);
+
         return p;
-    
+
     }/*
     
         public int[] vorazuniPoda(puntos p[], int ini){
@@ -100,4 +99,29 @@ public class Voraces {
         }
         return d;
     }*/
+
+    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+        ArrayList<Punto> ruta = new ArrayList<>();
+        boolean[] visitadas = new boolean[ciudades.size()];
+        Arrays.fill(visitadas, false);
+
+        Punto ciudadActual = ciudades.get(0);
+        visitadas[0] = true;
+        ruta.add(ciudadActual);
+
+        while (ruta.size() < ciudades.size()) {
+            int posicion = ciudadMasCercana(ciudadActual, ciudades,
+                    visitadas);
+            visitadas[posicion] = true;
+            ruta.add(ciudades.get(posicion));
+            ciudadActual = ciudades.get(posicion);
+        }
+
+        ruta.add(ciudades.get(0));
+
+        return ruta;
+    }
+
+   
+
 }
