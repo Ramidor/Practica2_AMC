@@ -121,4 +121,29 @@ public class Voraces {
         }
         return d;
     }*/
+
+    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+        ArrayList<Punto> ruta = new ArrayList<>();
+        boolean[] visitadas = new boolean[ciudades.size()];
+        Arrays.fill(visitadas, false);
+
+        Punto ciudadActual = ciudades.get(0);
+        visitadas[0] = true;
+        ruta.add(ciudadActual);
+
+        while (ruta.size() < ciudades.size()) {
+            int posicion = ciudadMasCercana(ciudadActual, ciudades,
+                    visitadas);
+            visitadas[posicion] = true;
+            ruta.add(ciudades.get(posicion));
+            ciudadActual = ciudades.get(posicion);
+        }
+
+        ruta.add(ciudades.get(0));
+
+        return ruta;
+    }
+
+   
+
 }
