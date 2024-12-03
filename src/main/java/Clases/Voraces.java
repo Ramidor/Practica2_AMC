@@ -23,7 +23,32 @@ public class Voraces {
     private Punto p;
     private double dmin = Integer.MAX_VALUE;
 
-    public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
+   
+ 
+
+    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+        ArrayList<Punto> ruta = new ArrayList<>();
+        boolean[] visitadas = new boolean[ciudades.size()];
+        Arrays.fill(visitadas, false);
+
+        Punto ciudadActual = ciudades.get(0);
+        visitadas[0] = true;
+        ruta.add(ciudadActual);
+
+        while (ruta.size() < ciudades.size()) {
+            int posicion = ciudadMasCercana(ciudadActual, ciudades,
+                    visitadas);
+            visitadas[posicion] = true;
+            ruta.add(ciudades.get(posicion));
+            ciudadActual = ciudades.get(posicion);
+        }
+
+        ruta.add(ciudades.get(0));
+
+        return ruta;
+    }
+    
+     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         Random r = new Random();
         int posAlea = r.nextInt(ciudades.size()), posIzq, posDer, extremoIzq, extremoDer;
@@ -58,24 +83,8 @@ public class Voraces {
         return ruta;
     }
 
-    private static int ciudadMasCercana(Punto origen, ArrayList<Punto> ciudades, boolean[] visitadas) {
-        int posicion = -1;
-        double minima = Double.MAX_VALUE;
-
-        for (int i = 0; i < ciudades.size(); i++) {
-            if (!visitadas[i]) {
-                double distancia = distancia(origen, ciudades.get(i));
-                if (distancia < minima) {
-                    minima = distancia;
-                    posicion = i;
-                }
-            }
-        }
-
-        return posicion;
-    }
-
-    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+     
+    public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
@@ -95,6 +104,58 @@ public class Voraces {
         ruta.add(ciudades.get(0));
 
         return ruta;
+    }
+     
+      public static ArrayList<Punto> vorazBidireccionalPoda(ArrayList<Punto> ciudades) {
+        ArrayList<Punto> ruta = new ArrayList<>();
+        Random r = new Random();
+        int posAlea = r.nextInt(ciudades.size()), posIzq, posDer, extremoIzq, extremoDer;
+        boolean[] visitadas = new boolean[ciudades.size()];
+        Arrays.fill(visitadas, false);
+        visitadas[posAlea] = true;
+        ruta.add(ciudades.get(posAlea));
+        ruta.add(ciudades.get(posAlea));
+        posIzq = 0;
+        posDer = ruta.size() - 1;
+        while (ruta.size() <= ciudades.size()) {
+            extremoDer = ciudadMasCercana(ruta.get(posDer), ciudades,
+                    visitadas);
+            if (ruta.get(posIzq) != ruta.get(posDer)) {
+                extremoIzq = ciudadMasCercana(ruta.get(posIzq), ciudades,
+                        visitadas);
+                if (distancia(ciudades.get(extremoIzq), ruta.get(posIzq))
+                        < distancia(ciudades.get(extremoDer), ruta.get(posDer))) {
+                    visitadas[extremoIzq] = true;
+                    posIzq++;
+                    posDer++;
+                    ruta.add(posIzq, ciudades.get(extremoIzq));
+                } else {
+                    visitadas[extremoDer] = true;
+                    ruta.add(posDer, ciudades.get(extremoDer));
+                }
+            } else {
+                visitadas[extremoDer] = true;
+                ruta.add(posDer, ciudades.get(extremoDer));
+            }
+        }
+        return ruta;
+    }
+
+       private static int ciudadMasCercana(Punto origen, ArrayList<Punto> ciudades, boolean[] visitadas) {
+        int posicion = -1;
+        double minima = Double.MAX_VALUE;
+
+        for (int i = 0; i < ciudades.size(); i++) {
+            if (!visitadas[i]) {
+                double distancia = distancia(origen, ciudades.get(i));
+                if (distancia < minima) {
+                    minima = distancia;
+                    posicion = i;
+                }
+            }
+        }
+
+        return posicion;
     }
 
 }
