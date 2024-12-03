@@ -57,21 +57,24 @@ public class Voraces {
         return ruta;
     }
 
-    public Punto ciudadCercana(ArrayList<Punto> novisitados, int ini) {
-        double distanciapuntos;
-        Punto puntos;
-        for (int i = 0; i < novisitados.size(); i++) {
-            distanciapuntos = distancia(novisitados.get(ini), novisitados.get(i));
-            if (distanciapuntos <= dmin) {
-                dmin = distanciapuntos;
-                puntos = novisitados.get(i);
+    private static int ciudadMasCercana(Punto origen, ArrayList<Punto> ciudades, boolean[] visitadas) {
+        int posicion = -1;
+        double minima = Double.MAX_VALUE;
+
+        for (int i = 0; i < ciudades.size(); i++) {
+            if (!visitadas[i]) {
+                double distancia = distancia2(origen, ciudades.get(i));
+                if (distancia < minima) {
+                    minima = distancia;
+                    posicion = i;
+                }
             }
         }
-        novisitados.remove(ini);
 
-        return p;
+        return posicion;
+    }
 
-    }/*
+    /*
     
         public int[] vorazuniPoda(puntos p[], int ini){
         Punto pini = p[ini];
@@ -121,7 +124,6 @@ public class Voraces {
         }
         return d;
     }*/
-
     public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
@@ -143,7 +145,5 @@ public class Voraces {
 
         return ruta;
     }
-
-   
 
 }
