@@ -52,35 +52,37 @@ public class Voraces {
     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         Random r = new Random();
-        int posAlea = r.nextInt(ciudades.size()), posIzq, posDer, extremoIzq, extremoDer;
+        int ciudadInicio = r.nextInt(ciudades.size());
+        Punto inicio = ciudades.get(ciudadInicio);
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
-        visitadas[posAlea] = true;
-        ruta.add(ciudades.get(posAlea));
-        ruta.add(ciudades.get(posAlea));
-        posIzq = 0;
-        posDer = ruta.size() - 1;
+        visitadas[ciudadInicio] = true;
+        ruta.add(inicio);
+        Punto extremoInicio = inicio;
+        Punto extremoFinal = inicio;
         while (ruta.size() <= ciudades.size()) {
-            extremoDer = ciudadMasCercana(ruta.get(posDer), ciudades,
-                    visitadas);
-            if (ruta.get(posIzq) != ruta.get(posDer)) {
-                extremoIzq = ciudadMasCercana(ruta.get(posIzq), ciudades,
-                        visitadas);
-                if (distancia(ciudades.get(extremoIzq), ruta.get(posIzq))
-                        < distancia(ciudades.get(extremoDer), ruta.get(posDer))) {
-                    visitadas[extremoIzq] = true;
-                    posIzq++;
-                    posDer++;
-                    ruta.add(posIzq, ciudades.get(extremoIzq));
-                } else {
-                    visitadas[extremoDer] = true;
-                    ruta.add(posDer, ciudades.get(extremoDer));
-                }
+            int cercanaInicioIdx = ciudadMasCercana(extremoInicio, ciudades, visitadas);
+            int cercanaFinalIdx = ciudadMasCercana(extremoFinal, ciudades, visitadas);
+            
+            double distanciaInicio = distancia(extremoInicio, ciudades.get(cercanaInicioIdx));
+            double distanciaFinal = distancia(extremoFinal, ciudades.get(cercanaFinalIdx));
+            
+            if (distanciaInicio < distanciaFinal) {
+                // Añadir al inicio
+                Punto cercanaInicio = ciudades.get(cercanaInicioIdx);
+                ruta.add(0, cercanaInicio);
+                visitadas[cercanaInicioIdx] = true;
+                extremoInicio = cercanaInicio;
             } else {
-                visitadas[extremoDer] = true;
-                ruta.add(posDer, ciudades.get(extremoDer));
+                // Añadir al final
+                Punto cercanaFinal = ciudades.get(cercanaFinalIdx);
+                ruta.add(cercanaFinal);
+                visitadas[cercanaFinalIdx] = true;
+                extremoFinal = cercanaFinal;
             }
         }
+        ruta.add(inicio);
+
         return ruta;
     }
 
@@ -202,36 +204,36 @@ public class Voraces {
         int i = izq;         // i realiza la búsqueda de izquierda a derecha
         int j = der;         // j realiza la búsqueda de derecha a izquierda
         Punto aux;
-       
+
         while (i < j) {
-                                            
+
             while ((puntos.get(i).getX() <= pivote.getX()) && (i < j)) {
 
                 i++;// busca elemento mayor que pivote
-                
+
             }
-           
+
             while (puntos.get(j).getX() > pivote.getX()) {
                 j--;// busca elemento menor que pivote
-               
+
             }
-           
+
             if (i < j) {                        // si no se han cruzado                      
                 aux = puntos.get(i);                      // los intercambia
                 puntos.set(i, puntos.get(j));
                 puntos.set(j, aux);
-               
+
             }
-           
+
         }
 
         puntos.set(izq, puntos.get(j));      // se coloca el pivote en su lugar de forma que tendremos                                    
         puntos.set(j, pivote);      // los menores a su izquierda y los mayores a su derecha
-       
+
         if (izq < j - 1) {
-            quicksort(puntos, izq, j - 1);          
+            quicksort(puntos, izq, j - 1);
         }
-       
+
         if (j + 1 < der) {
             quicksort(puntos, j + 1, der);
         }

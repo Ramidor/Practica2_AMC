@@ -1,7 +1,5 @@
 package Vistas;
 
-
-
 import Clases.Punto;
 import Clases.PuntosMin;
 import Clases.Voraces;
@@ -9,7 +7,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class MainAppGUI extends JFrame {
-/*
+
+    /*
     private int talla;
     private boolean peorcaso = false;
     private ArrayList<Punto> puntos = new ArrayList<>();
@@ -336,51 +335,49 @@ public class MainAppGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Error en la opción 8: " + e.getMessage());
         }
     }
-*/
+     */
     public static void main(String[] args) {
-                Voraces v=new Voraces();
-        ArrayList<Punto> l=new ArrayList<>();
+        Voraces v = new Voraces();
+        ArrayList<Punto> l = new ArrayList<>();
         ArrayList<Punto> b;
-        
-            Punto p=new Punto(1,0.375,0.951);
-            l.add(p);
-              Punto s=new Punto(2,0.732,0.599);
-            l.add(s);
-        
-              Punto d=new Punto(3,0.156,0.156);
-            l.add(d);
-        
-              Punto q=new Punto(4,0.058,0.866);
-            l.add(q);
-        PuntosMin pue=new PuntosMin(p, s);
-        PuntosMin pue2=new PuntosMin(p, d);   
-        PuntosMin pue3=new PuntosMin(p, q);  
-        
-         PuntosMin puer=new PuntosMin(s, d);
-        PuntosMin puer2=new PuntosMin(s, q);   
-        
-        
-        PuntosMin puert=new PuntosMin(d, q);  
-        
-        System.out.println(pue.getA()+"     "+pue.getB()+"      "+pue.getDistancia());
-         System.out.println(pue2.getA()+"     "+pue2.getB()+"      "+pue2.getDistancia());
-          System.out.println(pue3.getA()+"     "+pue3.getB()+"      "+pue3.getDistancia());
-           System.out.println(puer.getA()+"     "+puer.getB()+"      "+puer.getDistancia());
-            System.out.println(puer2.getA()+"     "+puer2.getB()+"      "+puer2.getDistancia());
-             System.out.println(puert.getA()+"     "+puert.getB()+"      "+puert.getDistancia());
-    
-           
-       v.quicksort(l, 0, l.size()-1);
-         for (int i = 0; i < l.size(); i++) {
+
+        Punto p = new Punto(1, 0.375, 0.951);
+        l.add(p);
+        Punto s = new Punto(2, 0.732, 0.599);
+        l.add(s);
+
+        Punto d = new Punto(3, 0.156, 0.156);
+        l.add(d);
+
+        Punto q = new Punto(4, 0.058, 0.866);
+        l.add(q);
+        PuntosMin pue = new PuntosMin(p, s);
+        PuntosMin pue2 = new PuntosMin(p, d);
+        PuntosMin pue3 = new PuntosMin(p, q);
+
+        PuntosMin puer = new PuntosMin(s, d);
+        PuntosMin puer2 = new PuntosMin(s, q);
+
+        PuntosMin puert = new PuntosMin(d, q);
+
+        System.out.println(pue.getA() + "     " + pue.getB() + "      " + pue.getDistancia());
+        System.out.println(pue2.getA() + "     " + pue2.getB() + "      " + pue2.getDistancia());
+        System.out.println(pue3.getA() + "     " + pue3.getB() + "      " + pue3.getDistancia());
+        System.out.println(puer.getA() + "     " + puer.getB() + "      " + puer.getDistancia());
+        System.out.println(puer2.getA() + "     " + puer2.getB() + "      " + puer2.getDistancia());
+        System.out.println(puert.getA() + "     " + puert.getB() + "      " + puert.getDistancia());
+
+        v.quicksort(l, 0, l.size() - 1);
+        for (int i = 0; i < l.size(); i++) {
             System.out.println(l.get(i));
         }
         System.out.println("Ruta Unidirecional");
-       b= v.vorazUnidireccionalPoda(l);
+        b = v.vorazUnidireccionalPoda(l);
         for (int i = 0; i < b.size(); i++) {
             System.out.println(b.get(i));
         }
-       // 
-      /* 
+        // 
+        /* 
           for (int i = 0; i < 4; i++) {
             System.out.println(b.get(i).getX()+"            "+b.get(i).getY());
         
@@ -397,6 +394,6 @@ public class MainAppGUI extends JFrame {
           
           
           
-     */     
+         */
     }
 }
