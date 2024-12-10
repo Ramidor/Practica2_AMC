@@ -98,7 +98,7 @@ public class Voraces {
         ruta.add(ciudadActual);
 
         while (ruta.size() < ciudades.size()) {
-            int posicion = ciudadMasCercana(ciudadActual, ciudades, visitadas);
+            int posicion = ciudadMasCercanaPoda(ciudadActual, ciudades, visitadas);
             visitadas[posicion] = true;
             ruta.add(ciudadesordenadas.get(posicion));
             ciudadActual = ciudadesordenadas.get(posicion);
@@ -195,4 +195,45 @@ public class Voraces {
 
     }
 
+    public static void quicksort(List<Punto> puntos, int izq, int der) {
+
+        // tomamos primer elemento como pivote
+        Punto pivote = puntos.get(izq);
+        int i = izq;         // i realiza la búsqueda de izquierda a derecha
+        int j = der;         // j realiza la búsqueda de derecha a izquierda
+        Punto aux;
+       
+        while (i < j) {
+                                            
+            while ((puntos.get(i).getX() <= pivote.getX()) && (i < j)) {
+
+                i++;// busca elemento mayor que pivote
+                
+            }
+           
+            while (puntos.get(j).getX() > pivote.getX()) {
+                j--;// busca elemento menor que pivote
+               
+            }
+           
+            if (i < j) {                        // si no se han cruzado                      
+                aux = puntos.get(i);                      // los intercambia
+                puntos.set(i, puntos.get(j));
+                puntos.set(j, aux);
+               
+            }
+           
+        }
+
+        puntos.set(izq, puntos.get(j));      // se coloca el pivote en su lugar de forma que tendremos                                    
+        puntos.set(j, pivote);      // los menores a su izquierda y los mayores a su derecha
+       
+        if (izq < j - 1) {
+            quicksort(puntos, izq, j - 1);          
+        }
+       
+        if (j + 1 < der) {
+            quicksort(puntos, j + 1, der);
+        }
+    }
 }

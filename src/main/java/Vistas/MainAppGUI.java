@@ -3,6 +3,7 @@ package Vistas;
 
 
 import Clases.Punto;
+import Clases.PuntosMin;
 import Clases.Voraces;
 import javax.swing.*;
 import java.util.ArrayList;
@@ -351,22 +352,36 @@ public class MainAppGUI extends JFrame {
         
               Punto q=new Punto(4,0.058,0.866);
             l.add(q);
+        PuntosMin pue=new PuntosMin(p, s);
+        PuntosMin pue2=new PuntosMin(p, d);   
+        PuntosMin pue3=new PuntosMin(p, q);  
         
-              Punto px=new Punto(5,0.601,0.708);
-            l.add(px);
+         PuntosMin puer=new PuntosMin(s, d);
+        PuntosMin puer2=new PuntosMin(s, q);   
         
         
-
-        for (int i = 0; i < 5; i++) {
-            System.out.println(l.get(i).getX()+"            "+l.get(i).getY());
+        PuntosMin puert=new PuntosMin(d, q);  
         
+        System.out.println(pue.getA()+"     "+pue.getB()+"      "+pue.getDistancia());
+         System.out.println(pue2.getA()+"     "+pue2.getB()+"      "+pue2.getDistancia());
+          System.out.println(pue3.getA()+"     "+pue3.getB()+"      "+pue3.getDistancia());
+           System.out.println(puer.getA()+"     "+puer.getB()+"      "+puer.getDistancia());
+            System.out.println(puer2.getA()+"     "+puer2.getB()+"      "+puer2.getDistancia());
+             System.out.println(puert.getA()+"     "+puert.getB()+"      "+puert.getDistancia());
+    
+           
+       v.quicksort(l, 0, l.size()-1);
+         for (int i = 0; i < l.size(); i++) {
+            System.out.println(l.get(i));
         }
         System.out.println("Ruta Unidirecional");
-       b= v.vorazUnidireccional(l);
-       
-       // v.quicksort(l, 0, l.size()-1);
-       
-          for (int i = 0; i < 5; i++) {
+       b= v.vorazUnidireccionalPoda(l);
+        for (int i = 0; i < b.size(); i++) {
+            System.out.println(b.get(i));
+        }
+       // 
+      /* 
+          for (int i = 0; i < 4; i++) {
             System.out.println(b.get(i).getX()+"            "+b.get(i).getY());
         
         }
@@ -375,13 +390,13 @@ public class MainAppGUI extends JFrame {
        
        // v.quicksort(l, 0, l.size()-1);
        
-          for (int i = 0; i < 5; i++) {
+          for (int i = 0; i < 4; i++) {
             System.out.println(b.get(i).getX()+"            "+b.get(i).getY());
         
         } 
           
           
           
-          
+     */     
     }
 }
