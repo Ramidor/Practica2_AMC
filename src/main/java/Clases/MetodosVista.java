@@ -17,22 +17,23 @@ public class MetodosVista {
     private ArrayList<Punto> ruta = new ArrayList<>();
    
     
-    public ArrayList<String[]> opcion3(int tipo, ArrayList<Punto> ciudades) {
+    public ArrayList<String[]> opcion3(int tipo, ArrayList<Punto> ciudades,int ini) {
         ArrayList<String[]> resultados = new ArrayList<>();
          ArrayList<String> strats = new ArrayList<>();
         v.setCont();
         inicio = System.nanoTime();
         if (tipo == 0) {
-            ruta=v.vorazUnidireccional(ciudades);
+            
+            ruta=v.vorazUnidireccional(ciudades,ini);
         }
         if (tipo == 1) {
-            ruta=v.vorazBidireccional(ciudades);
+            ruta=v.vorazBidireccional(ciudades,ini);
         }
         if (tipo == 2) {
-           ruta=v.vorazUnidireccionalPoda(ciudades);
+           ruta=v.vorazUnidireccionalPoda(ciudades,ini);
         }
         if (tipo == 3) {
-            ruta=v.vorazBidireccionalPoda(ciudades);
+            ruta=v.vorazBidireccionalPoda(ciudades,ini);
         }
         fin = System.nanoTime();
         Tejecucion = fin - inicio;

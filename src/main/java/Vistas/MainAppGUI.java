@@ -11,18 +11,19 @@ import java.awt.Image;
 import java.io.FileNotFoundException;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.table.DefaultTableModel;
 
 public class MainAppGUI extends JFrame {
 
-    private int talla;
+    private int talla,inicio;
     private ArrayList<Punto> puntos = new ArrayList<>();
    
     private ArrayList<Punto> puntosDataset = new ArrayList<>();
     private Voraces v = new Voraces();
     private MetodosVista mv =new MetodosVista();
     private String fichero;
-
+    private Random r =new Random();
     private final Lectura lec1 = new Lectura();
     //private final Graficas g = new Graficas();
 
@@ -113,11 +114,13 @@ private void ejecutarOpcion3() {
         model.addColumn("Solución");
         model.addColumn("Calculadas");
         model.addColumn("Tiempo (ms)");
-
+        
+       
         // Procesar datos y llenar la tabla
         puntos = (ArrayList<Punto>) puntosDataset.clone();
+         inicio=r.nextInt(puntos.size()-1);
         for (int i = 0; i < 4; i++) {
-            ArrayList<String[]> resultados = mv.opcion3(i, puntos);
+            ArrayList<String[]> resultados = mv.opcion3(i, puntos,inicio);
             puntos = (ArrayList<Punto>) puntosDataset.clone();
 
             // Agregar resultados al modelo de la tabla

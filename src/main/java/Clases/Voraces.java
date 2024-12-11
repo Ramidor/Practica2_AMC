@@ -16,13 +16,13 @@ import java.util.Random;
 public class Voraces {
 
     private static int cont = 0;
-    private static int solucion = 0;
+    private static float solucion = 0;
 
     public static void setSolucion() {
         Voraces.solucion = 0;
     }
 
-    public static int getSolucion() {
+    public static float getSolucion() {
         return solucion;
     }
 
@@ -41,43 +41,46 @@ public class Voraces {
         return (double) Math.sqrt((x * x) + (y * y));
     }
 
-    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+    public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades, int ini) {
         setCont();
         setSolucion();
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
-        Random r = new Random();
-        int posAlea = r.nextInt(ciudades.size());
 
-        Punto ciudadActual = ciudades.get(posAlea);
-        visitadas[posAlea] = true;
+        Punto ciudadActual = ciudades.get(0);
+        visitadas[0] = true;
         ruta.add(ciudadActual);
 
         while (ruta.size() < ciudades.size()) {
             int posicion = ciudadMasCercana(ciudadActual, ciudades, visitadas);
+            double dist = distancia(ciudadActual, ciudades.get(posicion));
+            cont++;
+            solucion += dist;
             visitadas[posicion] = true;
             ruta.add(ciudades.get(posicion));
             ciudadActual = ciudades.get(posicion);
         }
-
-        ruta.add(ciudades.get(posAlea));
+        double distanciafinal = distancia(ciudadActual, ciudades.get(0));
+        cont++;
+        solucion += distanciafinal;
+        ruta.add(ciudades.get(0));
 
         return ruta;
     }
 
-    public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
+    public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades, int ini) {
+
         ArrayList<Punto> ruta = new ArrayList<>();
         setCont();
         setSolucion();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
-        Random r = new Random();
-        int ciudadInicio = r.nextInt(ciudades.size());
-        Punto inicio = ciudades.get(ciudadInicio);
+
+        Punto inicio = ciudades.get(0);
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
-        visitadas[ciudadInicio] = true;
+        visitadas[0] = true;
 
         rutaIzquierda.add(inicio);
         rutaDerecha.add(inicio);
@@ -96,12 +99,14 @@ public class Voraces {
                 rutaIzquierda.add(izquierda);
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
+                solucion += distanciaIzquierda;
             } else {
                 // Añadir al final
                 Punto derecha = ciudades.get(cercanaDerecha);
                 rutaDerecha.add(derecha);
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
+                solucion += distanciaDerecha;
             }
         }
 
@@ -118,44 +123,52 @@ public class Voraces {
         return ruta;
     }
 
-    public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades) {
+    public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades, int ini) {
         ArrayList<Punto> ruta = new ArrayList<>();
-        ArrayList<Punto> ciudadesordenadas = (ArrayList<Punto>) ciudades.clone();
+        boolean[] visitadas = new boolean[ciudades.size()];
+        Arrays.fill(visitadas, false);
+        quicksort(ciudades, 0, ciudades.size() - 1);
+    
         setCont();
         setSolucion();
-        boolean[] visitadas = new boolean[ciudadesordenadas.size()];
-        Arrays.fill(visitadas, false);
-        Random r = new Random();
-        int posAlea = r.nextInt(ciudades.size());
 
-        Punto ciudadActual = ciudades.get(posAlea);
-        visitadas[posAlea] = true;
+        Punto ciudadActual = ciudades.get(16);
+        visitadas[16] = true;
         ruta.add(ciudadActual);
-
+        System.out.println(ciudadActual);
         while (ruta.size() < ciudades.size()) {
             int posicion = ciudadMasCercanaPoda(ciudadActual, ciudades, visitadas);
+            System.out.println(ciudades.get(posicion));
+            // Verificar si ciudadMasCercanaPoda encontró una ciudad válida
+            if (posicion == -1) {
+                throw new RuntimeException("Error: No se encontró una ciudad válida para continuar la ruta.");
+            }
+            double dist = distancia(ciudadActual, ciudades.get(posicion));
+            cont++;
+            solucion += dist;
             visitadas[posicion] = true;
-            ruta.add(ciudadesordenadas.get(posicion));
-            ciudadActual = ciudadesordenadas.get(posicion);
+            ciudadActual = ciudades.get(posicion);
+            ruta.add(ciudadActual);
         }
-
-        ruta.add(ciudades.get(posAlea));
-
+        double distanciafinal = distancia(ciudadActual, ciudades.get(16));
+        cont++;
+        solucion += distanciafinal;
+        ruta.add(ciudades.get(16));
+        // Cerrar el ciclo
         return ruta;
     }
 
-    public static ArrayList<Punto> vorazBidireccionalPoda(ArrayList<Punto> ciudades) {
+    public static ArrayList<Punto> vorazBidireccionalPoda(ArrayList<Punto> ciudades, int ini) {
         ArrayList<Punto> ruta = new ArrayList<>();
         setCont();
-        setSolucion();
+        quicksort(ciudades, 0, ciudades.size() - 1);
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
-        Random r = new Random();
-        int ciudadInicio = r.nextInt(ciudades.size());
-        Punto inicio = ciudades.get(ciudadInicio);
+
+        Punto inicio = ciudades.get(16);
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
-        visitadas[ciudadInicio] = true;
+        visitadas[16] = true;
 
         rutaIzquierda.add(inicio);
         rutaDerecha.add(inicio);
@@ -169,18 +182,22 @@ public class Voraces {
 
             double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
             cont += 2;
+
             if (distanciaIzquierda <= distanciaDerecha) {
                 // Añadir al inicio
                 Punto izquierda = ciudades.get(cercanaIzquierda);
                 rutaIzquierda.add(izquierda);
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
+                solucion += distanciaIzquierda;
+
             } else {
                 // Añadir al final
                 Punto derecha = ciudades.get(cercanaDerecha);
                 rutaDerecha.add(derecha);
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
+                solucion += distanciaDerecha;
             }
         }
         for (int i = 0; i < rutaIzquierda.size(); i++) {
@@ -203,8 +220,6 @@ public class Voraces {
                 cont++;
 
                 if (distancia < minima) {
-
-                    solucion += distancia;
                     minima = distancia;
                     posicion = i;
                 }
@@ -218,15 +233,13 @@ public class Voraces {
         double minima = Double.MAX_VALUE;
 
         for (int i = 0; i < ciudades.size(); i++) {
-            if (!visitadas[i] && Math.abs(origen.getX() - ciudades.get(i).getX()) <= minima) {
+            if (!visitadas[i] && Math.abs(origen.getX() - ciudades.get(i).getX()) < minima) {
                 double distancia = distancia(origen, ciudades.get(i));
                 cont++;
+
                 if (distancia < minima) {
-                    solucion += distancia;
                     minima = distancia;
                     posicion = i;
-                } else {
-                    i = ciudades.size();
                 }
             }
         }
