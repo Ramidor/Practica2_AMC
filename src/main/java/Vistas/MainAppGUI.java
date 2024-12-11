@@ -16,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 public class MainAppGUI extends JFrame {
 
     private int talla;
-    private boolean peorcaso = false;
     private ArrayList<Punto> puntos = new ArrayList<>();
    
     private ArrayList<Punto> puntosDataset = new ArrayList<>();
@@ -67,6 +66,7 @@ public class MainAppGUI extends JFrame {
         btnOpcion3.addActionListener(e -> ejecutarOpcion3());
         btnOpcion4.addActionListener(e -> ejecutarOpcion4());
         btnOpcion5.addActionListener(e -> ejecutarOpcion5());
+        btnOpcion6.addActionListener(e -> ejecutarOpcion6());
         btnSalir.addActionListener(e -> System.exit(0));
     }
 
@@ -98,6 +98,7 @@ public class MainAppGUI extends JFrame {
 
 private void ejecutarOpcion3() {
     try {
+        
          tabbedPane.removeAll();
         // Crear panel principal
         JPanel panelFichero = new JPanel(new BorderLayout());
@@ -128,6 +129,7 @@ private void ejecutarOpcion3() {
         // Crear la tabla y añadirla al panel
         JTable table = new JTable(model);
         panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+
 
         // Añadir el panel al contenedor principal
         this.add(panelFichero, BorderLayout.CENTER);

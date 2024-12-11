@@ -16,7 +16,7 @@ import java.util.Random;
 public class Voraces {
 
     private static int cont = 0;
-     private static int solucion = 0;
+    private static int solucion = 0;
 
     public static void setSolucion() {
         Voraces.solucion = 0;
@@ -62,13 +62,14 @@ public class Voraces {
         }
 
         ruta.add(ciudades.get(posAlea));
-        
+
         return ruta;
     }
 
     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         setCont();
+        setSolucion();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
         Random r = new Random();
@@ -88,7 +89,7 @@ public class Voraces {
 
             double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
             double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-            cont+=2;
+            cont += 2;
             if (distanciaIzquierda <= distanciaDerecha) {
                 // Añadir al inicio
                 Punto izquierda = ciudades.get(cercanaIzquierda);
@@ -103,17 +104,16 @@ public class Voraces {
                 extremoDer = derecha;
             }
         }
-       
+
         for (int i = 0; i < rutaIzquierda.size(); i++) {
             ruta.add(rutaIzquierda.get(i));
-          
+
         }
-      
+
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-         
+
         }
-   
 
         return ruta;
     }
@@ -121,7 +121,8 @@ public class Voraces {
     public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         ArrayList<Punto> ciudadesordenadas = (ArrayList<Punto>) ciudades.clone();
-setCont();
+        setCont();
+        setSolucion();
         boolean[] visitadas = new boolean[ciudadesordenadas.size()];
         Arrays.fill(visitadas, false);
         Random r = new Random();
@@ -139,13 +140,14 @@ setCont();
         }
 
         ruta.add(ciudades.get(posAlea));
-        
+
         return ruta;
     }
 
     public static ArrayList<Punto> vorazBidireccionalPoda(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
-setCont();
+        setCont();
+        setSolucion();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
         Random r = new Random();
@@ -166,7 +168,7 @@ setCont();
             double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
 
             double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-            cont+=2;
+            cont += 2;
             if (distanciaIzquierda <= distanciaDerecha) {
                 // Añadir al inicio
                 Punto izquierda = ciudades.get(cercanaIzquierda);
@@ -186,9 +188,9 @@ setCont();
         }
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-         
+
         }
-        
+
         return ruta;
     }
 
@@ -201,8 +203,8 @@ setCont();
                 cont++;
 
                 if (distancia < minima) {
-                    
-                    solucion+=distancia;
+
+                    solucion += distancia;
                     minima = distancia;
                     posicion = i;
                 }
@@ -220,7 +222,7 @@ setCont();
                 double distancia = distancia(origen, ciudades.get(i));
                 cont++;
                 if (distancia < minima) {
-                    solucion+=distancia;
+                    solucion += distancia;
                     minima = distancia;
                     posicion = i;
                 } else {
