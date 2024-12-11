@@ -19,29 +19,28 @@ public class MetodosVista {
     
     public ArrayList<String[]> opcion3(int tipo, ArrayList<Punto> ciudades) {
         ArrayList<String[]> resultados = new ArrayList<>();
+         ArrayList<String> strats = new ArrayList<>();
         v.setCont();
-
         inicio = System.nanoTime();
-        if (tipo == 1) {
+        if (tipo == 0) {
             ruta=v.vorazUnidireccional(ciudades);
         }
-        if (tipo == 2) {
+        if (tipo == 1) {
             ruta=v.vorazBidireccional(ciudades);
         }
-        if (tipo == 3) {
+        if (tipo == 2) {
            ruta=v.vorazUnidireccionalPoda(ciudades);
         }
-        if (tipo == 4) {
+        if (tipo == 3) {
             ruta=v.vorazBidireccionalPoda(ciudades);
         }
         fin = System.nanoTime();
         Tejecucion = fin - inicio;
+        strats=getEstrategias();
         String[] fila = new String[]{
-            estrategias.get(tipo - 1), // Estrategia
-            String.valueOf(pmin.getA().getId()), // ID del primer punto
-            String.valueOf(pmin.getB().getId()), // ID del segundo punto
-            String.valueOf(pmin.getDistancia()), // Distancia entre los puntos
-            String.valueOf(a.getCont()), // Contador de operaciones
+           strats.get(tipo), // Estrategia
+            String.valueOf(v.getSolucion()), // ID del primer punto
+            String.valueOf(v.getCont()), // Calculo de operaciones
             String.format("%.4f", Tejecucion / 1000000.0) // Tiempo de ejecución en ms
         };
         // Añadir la fila a la lista de resultados

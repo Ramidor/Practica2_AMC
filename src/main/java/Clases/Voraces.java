@@ -16,13 +16,22 @@ import java.util.Random;
 public class Voraces {
 
     private static int cont = 0;
+     private static int solucion = 0;
 
-    public Voraces() {
+    public static void setSolucion() {
+        Voraces.solucion = 0;
+    }
 
+    public static int getSolucion() {
+        return solucion;
     }
 
     public static void setCont() {
         Voraces.cont = 0;
+    }
+
+    public static int getCont() {
+        return cont;
     }
 
     public static double distancia(Punto a, Punto b) {
@@ -33,6 +42,8 @@ public class Voraces {
     }
 
     public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades) {
+        setCont();
+        setSolucion();
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
@@ -51,7 +62,7 @@ public class Voraces {
         }
 
         ruta.add(ciudades.get(posAlea));
-        setCont();
+        
         return ruta;
     }
 
@@ -196,7 +207,8 @@ public class Voraces {
                 cont++;
 
                 if (distancia < minima) {
-
+                    
+                    solucion+=distancia;
                     minima = distancia;
                     posicion = i;
                 }
@@ -214,6 +226,7 @@ public class Voraces {
                 double distancia = distancia(origen, ciudades.get(i));
                 cont++;
                 if (distancia < minima) {
+                    solucion+=distancia;
                     minima = distancia;
                     posicion = i;
                 } else {

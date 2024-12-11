@@ -111,10 +111,10 @@ public class MainAppGUI extends JFrame {
                 model.addColumn("Tiempo(mseg)");
                 
                     puntos = (ArrayList<Punto>) puntosDataset.clone();
-                    for (int i = 1; i < 5; i++) {
-                    ArrayList<String[]> resultados = mv.MostrarExhaustivaTabla(puntos, i);
+                    for (int i = 0; i < 4; i++) {
+                    ArrayList<String[]> resultados = mv.opcion3(i, puntos);
                     puntos = (ArrayList<Punto>) puntosDataset.clone();
-
+                    
                     // Agregar resultados al modelo de la tabla
                     for (String[] fila : resultados) {
                         model.addRow(fila);
