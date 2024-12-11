@@ -96,39 +96,50 @@ public class MainAppGUI extends JFrame {
 
     }
 
-    private void ejecutarOpcion3() {
-        try {
-            JPanel panelFichero = new JPanel(new BorderLayout());
-            // Crear etiqueta con el nombre del fichero
-                JLabel labelFichero = new JLabel("Nombre del fichero: " + fichero, SwingConstants.CENTER);
-                panelFichero.add(labelFichero, BorderLayout.NORTH);
+private void ejecutarOpcion3() {
+    try {
+         tabbedPane.removeAll();
+        // Crear panel principal
+        JPanel panelFichero = new JPanel(new BorderLayout());
 
-                // Configurar tabla para mostrar datos
-                DefaultTableModel model = new DefaultTableModel();
-                model.addColumn("Estrategia");
-                model.addColumn("Solucion");
-                model.addColumn("Calculadas");
-                model.addColumn("Tiempo(mseg)");
-                
-                    puntos = (ArrayList<Punto>) puntosDataset.clone();
-                    for (int i = 0; i < 4; i++) {
-                    ArrayList<String[]> resultados = mv.opcion3(i, puntos);
-                    puntos = (ArrayList<Punto>) puntosDataset.clone();
-                    
-                    // Agregar resultados al modelo de la tabla
-                    for (String[] fila : resultados) {
-                        model.addRow(fila);
-                    }
-                }
+        // Crear etiqueta con el nombre del fichero
+        JLabel labelFichero = new JLabel("Nombre del fichero: " + fichero, SwingConstants.CENTER);
+        panelFichero.add(labelFichero, BorderLayout.NORTH);
 
-                // Crear la tabla y añadirla al panel
-                JTable table = new JTable(model);
-                panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
-           
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error en la opción 3: " + e.getMessage());
+        // Configurar tabla para mostrar datos
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Estrategia");
+        model.addColumn("Solución");
+        model.addColumn("Calculadas");
+        model.addColumn("Tiempo (ms)");
+
+        // Procesar datos y llenar la tabla
+        puntos = (ArrayList<Punto>) puntosDataset.clone();
+        for (int i = 0; i < 4; i++) {
+            ArrayList<String[]> resultados = mv.opcion3(i, puntos);
+            puntos = (ArrayList<Punto>) puntosDataset.clone();
+
+            // Agregar resultados al modelo de la tabla
+            for (String[] fila : resultados) {
+                model.addRow(fila);
+            }
         }
+
+        // Crear la tabla y añadirla al panel
+        JTable table = new JTable(model);
+        panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+
+        // Añadir el panel al contenedor principal
+        this.add(panelFichero, BorderLayout.CENTER);
+        this.revalidate(); // Actualizar la interfaz gráfica
+        this.repaint();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error en la opción 3: " + e.getMessage());
+        e.printStackTrace(); // Mostrar detalles del error en la consola
     }
+}
+
 
     private void ejecutarOpcion4() {
 

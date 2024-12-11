@@ -68,7 +68,7 @@ public class Voraces {
 
     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
-
+        setCont();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
         Random r = new Random();
@@ -103,26 +103,25 @@ public class Voraces {
                 extremoDer = derecha;
             }
         }
-        System.out.println("Soy izquierda");
+       
         for (int i = 0; i < rutaIzquierda.size(); i++) {
             ruta.add(rutaIzquierda.get(i));
-            System.out.println(rutaIzquierda.get(i));
+          
         }
-        System.out.println("Soy derecha");
+      
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-            System.out.println(rutaDerecha.get(i));
+         
         }
-        System.out.println("");
-        System.out.println("soy las distancias calculadas" + cont);
-        setCont();
+   
+
         return ruta;
     }
 
     public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
         ArrayList<Punto> ciudadesordenadas = (ArrayList<Punto>) ciudades.clone();
-
+setCont();
         boolean[] visitadas = new boolean[ciudadesordenadas.size()];
         Arrays.fill(visitadas, false);
         Random r = new Random();
@@ -140,13 +139,13 @@ public class Voraces {
         }
 
         ruta.add(ciudades.get(posAlea));
-        setCont();
+        
         return ruta;
     }
 
     public static ArrayList<Punto> vorazBidireccionalPoda(ArrayList<Punto> ciudades) {
         ArrayList<Punto> ruta = new ArrayList<>();
-
+setCont();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
         Random r = new Random();
@@ -182,19 +181,14 @@ public class Voraces {
                 extremoDer = derecha;
             }
         }
-        System.out.println("Soy izquierda");
         for (int i = 0; i < rutaIzquierda.size(); i++) {
             ruta.add(rutaIzquierda.get(i));
-            System.out.println(rutaIzquierda.get(i));
         }
-        System.out.println("Soy derecha");
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-            System.out.println(rutaDerecha.get(i));
+         
         }
-        System.out.println("");
-        System.out.println("soy las distancias calculadas" + cont);
-        setCont();
+        
         return ruta;
     }
 
