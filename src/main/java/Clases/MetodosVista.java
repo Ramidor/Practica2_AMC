@@ -48,7 +48,7 @@ public class MetodosVista {
         };
         // Añadir la fila a la lista de resultados
         resultados.add(fila);
-
+        Graficas.mostrarPuntosConRuta(ciudades, ruta);
         return resultados;
     }
 
@@ -63,14 +63,14 @@ public class MetodosVista {
     }
 
     public ArrayList<String[]> opcion4() throws IOException {
-        ArrayList<Punto> puntos=new ArrayList<>();
+        ArrayList<Punto> puntos = new ArrayList<>();
         int talla = 1000;
-        double experimentos=10.0;
+        double experimentos = 10.0;
         long Tejecucion1 = 0, Tejecucion2 = 0, Tejecucion3 = 0, Tejecucion4 = 0;
-      
+
         ArrayList<String[]> resultados = new ArrayList<>();
 
-        while (talla <= 5000) {  
+        while (talla <= 5000) {
             for (int i = 0; i < experimentos; i++) {
                 v.rellenarPuntos(puntos, talla);
                 ArrayList<Punto> puntosCopia = (ArrayList<Punto>) puntos.clone();
@@ -83,7 +83,7 @@ public class MetodosVista {
                 Tejecucion1 += fin - inicio;
 
                 inicio = System.currentTimeMillis();
-                 v.vorazBidireccional(puntos, ini);
+                v.vorazBidireccional(puntos, ini);
                 fin = System.currentTimeMillis();
 
                 Tejecucion2 += fin - inicio;
@@ -99,7 +99,7 @@ public class MetodosVista {
                 fin = System.currentTimeMillis();
 
                 Tejecucion4 += fin - inicio;
-                  puntos.clear();
+                puntos.clear();
             }
 
             String[] fila = new String[]{
@@ -116,45 +116,75 @@ public class MetodosVista {
 
         return resultados;
     }
-    
-    public ArrayList<String[]> opcion5(ArrayList<Punto> puntos, boolean peorcaso, int est1, int est2) throws IOException {
-        int talla = 1000;
-        Punto p = new Punto();
-        Algoritmos a1 = new Algoritmos();
-        Algoritmos a2 = new Algoritmos();
+
+    public ArrayList<String[]> opcion5(int est1, int est2) throws IOException {
+        int talla = 1000, distanciasCalculadas1 = 0, distanciasCalculadas2 = 0;
+        int ini = 0;
+        double experimentos = 10.0;
+        long tiempoFin1, tiempoEjecucion1 = 0, tiempoEjecucion2 = 0, tiempoInicio1;
+        ArrayList<Punto> puntos = new ArrayList<>();
+        v.rellenarPuntos(puntos, talla);
+
+        ini = r.nextInt(puntos.size() - 1);
         ArrayList<String[]> resultados = new ArrayList<>();
 
         while (talla <= 5000) {
-            puntos.clear();
-            v.rellenarPuntos(puntos, talla);
+            for (int i = 0; i < experimentos; i++) {
 
-            // Ejecutar y medir tiempo para la primera estrategia
-            long tiempoInicio1 = System.nanoTime();
-            CompararStrats(puntos, est1);
-            long tiempoFin1 = System.nanoTime();
-            long tiempoEjecucion1 = (tiempoFin1 - tiempoInicio1); // Convertir a ms
-            int distanciasCalculadas1 = a1.getCont();
+                // Ejecutar y medir tiempo para la primera estrategia
+                tiempoInicio1 = System.currentTimeMillis();
+                if (est1 == 1) {
+                    ruta = v.vorazUnidireccional(puntos, ini);
+                }
+                if (est1 == 2) {
+                    ruta = v.vorazBidireccional(puntos, ini);
+                }
+                if (est1 == 3) {
+                    ruta = v.vorazUnidireccionalPoda(puntos, ini);
+                }
+                if (est1 == 4) {
+                    ruta = v.vorazBidireccionalPoda(puntos, ini);
+                }
+                tiempoFin1 = System.currentTimeMillis();
+                tiempoEjecucion1 = (tiempoFin1 - tiempoInicio1); // Convertir a ms
+                distanciasCalculadas1 += v.getCont();
 
-            // Ejecutar y medir tiempo para la segunda estrategia
-            long tiempoInicio2 = System.nanoTime();
-            CompararStrats(puntos, est2);
-            long tiempoFin2 = System.nanoTime();
-            long tiempoEjecucion2 = (tiempoFin2 - tiempoInicio2); // Convertir a ms
-            int distanciasCalculadas2 = a2.getCont();
+                // Ejecutar y medir tiempo para la segunda estrategia
+                tiempoInicio1 = System.currentTimeMillis();
+                if (est2 == 1) {
+                    ruta = v.vorazUnidireccional(puntos, ini);
+                }
+                if (est2 == 2) {
+                    ruta = v.vorazBidireccional(puntos, ini);
+                }
+                if (est2 == 3) {
+                    ruta = v.vorazUnidireccionalPoda(puntos, ini);
+                }
+                if (est2 == 4) {
+                    ruta = v.vorazBidireccionalPoda(puntos, ini);
+                }
+                tiempoFin1 = System.currentTimeMillis();
+                tiempoEjecucion2 = (tiempoFin1 - tiempoInicio1); // Convertir a ms
+                distanciasCalculadas2 += v.getCont();
 
-            // Agregar datos a la tabla
+                // Agregar datos a la tabla
+                puntos.clear();
+                v.rellenarPuntos(puntos, talla);
+                ini = r.nextInt(puntos.size() - 1);
+
+            }
             String[] fila = new String[]{
                 String.valueOf(talla), // Talla
-                String.format("%.4f", tiempoEjecucion1 / 1000000.0), // Tiempo
-                String.valueOf(distanciasCalculadas1), // Distancias
-                String.format("%.4f", tiempoEjecucion2 / 1000000.0), // Tiempo
-                String.valueOf(distanciasCalculadas2), // Distancias
+                String.format("%.4f", tiempoEjecucion1 / experimentos), // Tiempo
+                String.valueOf(distanciasCalculadas1 / experimentos), // Distancias
+                String.format("%.4f", tiempoEjecucion2 / experimentos), // Tiempo
+                String.valueOf(distanciasCalculadas2 / experimentos), // Distancias
             };
             resultados.add(fila);
-
             talla += 1000; // Incrementar talla
         }
-
+        
+    
         return resultados;
     }
 

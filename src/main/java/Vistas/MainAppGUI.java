@@ -211,9 +211,9 @@ public class MainAppGUI extends JFrame {
             model.addColumn("Distancias Calculadas");
             model.addColumn(opcionStr2 + " - Tiempo (ms)");
             model.addColumn("Distancias Calculadas");
-
+            
             // Paso 3: Ejecutar comparación para tallas de 500 a 5000
-            ArrayList<String[]> resultados = mv.opcion4();
+            ArrayList<String[]> resultados = mv.opcion5(est1, est2);
 
             for (String[] fila : resultados) {
                 model.addRow(fila);
@@ -225,13 +225,40 @@ public class MainAppGUI extends JFrame {
             tabbedPane.addTab("Estrategia: " + opcionStr1 + " - " + opcionStr2, panelFichero);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error en la opción 4: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error en la opción 5: " + e.getMessage());
         }
         
     }
 
     private void ejecutarOpcion6() {
+         /*  try {
+            tabbedPane.removeAll();
 
+            JPanel panelFichero = new JPanel(new BorderLayout());
+            // Paso 2: Crear modelo para la tabla
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Talla");
+            model.addColumn( + " - Tiempo (ms)");
+            model.addColumn("Distancias Calculadas");
+            model.addColumn(opcionStr2 + " - Tiempo (ms)");
+            model.addColumn("Distancias Calculadas");
+            
+            // Paso 3: Ejecutar comparación para tallas de 500 a 5000
+            ArrayList<String[]> resultados = mv.opcion5(est1, est2);
+
+            for (String[] fila : resultados) {
+                model.addRow(fila);
+            }
+
+            // Mostrar resultados en un nuevo JFrame con JTable
+            JTable table = new JTable(model);
+            panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+            tabbedPane.addTab("Estrategia: " + opcionStr1 + " - " + opcionStr2, panelFichero);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error en la opción 5: " + e.getMessage());
+        }
+     */   
     }
 
     public static void main(String[] args) throws FileNotFoundException {
