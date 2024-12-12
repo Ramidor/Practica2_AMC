@@ -23,7 +23,7 @@ public class MainAppGUI extends JFrame {
     private Voraces v = new Voraces();
     private MetodosVista mv = new MetodosVista();
     private String fichero;
-    private Random r = new Random();
+    private Random r = new Random(System.currentTimeMillis());
     private final Lectura lec1 = new Lectura();
     //private final Graficas g = new Graficas();
 
@@ -231,7 +231,7 @@ public class MainAppGUI extends JFrame {
     }
 
     private void ejecutarOpcion6() {
-         /*  try {
+           try {
             tabbedPane.removeAll();
 
             JPanel panelFichero = new JPanel(new BorderLayout());
@@ -258,7 +258,7 @@ public class MainAppGUI extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error en la opción 5: " + e.getMessage());
         }
-     */   
+     
     }
 
     public static void main(String[] args) throws FileNotFoundException {

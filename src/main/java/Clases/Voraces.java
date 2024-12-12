@@ -86,13 +86,13 @@ public class Voraces {
         rutaDerecha.add(inicio);
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
-        int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
-        int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
 
-        double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
-        double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
         while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
+            int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
+            int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
 
+            double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
+            double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
             //Preguntar raul si podemos meter el calculo de las distancias de alguna forma en los if para que solo hagamos un calculo de distancias
             cont += 2;
             if (distanciaIzquierda <= distanciaDerecha) {
@@ -102,8 +102,7 @@ public class Voraces {
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
-                cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
-                distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
+
             } else {
 
                 Punto derecha = ciudades.get(cercanaDerecha);
@@ -111,8 +110,7 @@ public class Voraces {
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
-                cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
-                distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
+
             }
         }
 
@@ -187,14 +185,15 @@ public class Voraces {
         rutaDerecha.add(inicio);
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
-        int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
-        int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
 
-        double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
-        double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-        cont += 2;
+        
         while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
+            int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
+            int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
 
+            double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
+            double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
+            cont += 2;
             if (distanciaIzquierda <= distanciaDerecha) {
                 // Añadir al inicio
                 Punto izquierda = ciudades.get(cercanaIzquierda);
@@ -202,9 +201,6 @@ public class Voraces {
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
-                cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
-                distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
-                cont++;
 
             } else {
                 // Añadir al final
@@ -213,9 +209,6 @@ public class Voraces {
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
-                cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
-                distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-                cont++;
             }
         }
         for (int i = 0; i < rutaIzquierda.size(); i++) {
@@ -225,7 +218,7 @@ public class Voraces {
             ruta.add(rutaDerecha.get(i));
 
         }
-        
+
         return ruta;
     }
 

@@ -64,8 +64,8 @@ public class Graficas {
         frame.setVisible(true);
     }
 
-    public static void mostrarPuntosConRuta(ArrayList<Punto> puntos, ArrayList<Punto> ruta) {
-        JFrame frame = new JFrame("Visualización de Ruta entre Puntos");
+    public static void mostrarPuntosConRuta(ArrayList<Punto> puntos, ArrayList<Punto> ruta, String estrategia) {
+        JFrame frame = new JFrame(estrategia);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 800);
 
@@ -93,25 +93,31 @@ public class Graficas {
 
                 // Dibujar puntos e IDs
                 g2d.setColor(Color.BLUE);
+                
                 for (Punto p : puntos) {
                     int x = (int) (p.getX() * scaleX);
                     int y = getHeight() - (int) (p.getY() * scaleY);
 
                     // Dibujar el punto
                     g2d.fillOval(x - 3, y - 3, 6, 6);
+                    
 
                     // Dibujar el ID del punto más cerca
                     g2d.setColor(Color.RED);
-                    g2d.drawString(String.format("(%.1f, %.1f)", p.getX(), p.getY()), x + 2, y - 2);
+                    g2d.drawString(String.valueOf(p.getId()), x + 2, y - 2);                   
                     g2d.setColor(Color.BLUE);
+                    
                 }
 
                 // Dibujar líneas entre puntos según la ruta
                 g2d.setColor(Color.BLACK);
                 g2d.setStroke(new BasicStroke(1));
                 for (int i = 0; i < ruta.size() - 1; i++) {
+                    
                     Punto p1 = ruta.get(i);
                     Punto p2 = ruta.get(i + 1);
+                    int x = (int) (p1.getX() * scaleX);
+                    int y = getHeight() - (int) (p1.getY() * scaleY);
 
                     int x1 = (int) (p1.getX() * scaleX);
                     int y1 = getHeight() - (int) (p1.getY() * scaleY);
@@ -119,6 +125,12 @@ public class Graficas {
                     int y2 = getHeight() - (int) (p2.getY() * scaleY);
 
                     g2d.drawLine(x1, y1, x2, y2);
+                    if (i==0) {
+                        g2d.setColor(Color.GREEN);
+                        g2d.fillOval(x - 3, y - 3, 6, 6);
+                        g2d.setColor(Color.BLACK);
+                    }
+                    
                 }
             }
         };

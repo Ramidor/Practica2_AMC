@@ -48,7 +48,7 @@ public class MetodosVista {
         };
         // Añadir la fila a la lista de resultados
         resultados.add(fila);
-        Graficas.mostrarPuntosConRuta(ciudades, ruta);
+        Graficas.mostrarPuntosConRuta(ciudades, ruta, getEstrategias().get(tipo));
         return resultados;
     }
 
