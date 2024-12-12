@@ -16,18 +16,19 @@ import javax.swing.table.DefaultTableModel;
 
 public class MainAppGUI extends JFrame {
 
-    private int talla,inicio;
+    private int talla, inicio;
     private ArrayList<Punto> puntos = new ArrayList<>();
-   
+
     private ArrayList<Punto> puntosDataset = new ArrayList<>();
     private Voraces v = new Voraces();
-    private MetodosVista mv =new MetodosVista();
+    private MetodosVista mv = new MetodosVista();
     private String fichero;
-    private Random r =new Random();
+    private Random r = new Random();
     private final Lectura lec1 = new Lectura();
     //private final Graficas g = new Graficas();
 
     private JTabbedPane tabbedPane;
+    private JLabel nombreFichero;
 
     public MainAppGUI() {
         setTitle("Interfaz Gráfica de la Aplicación");
@@ -37,15 +38,19 @@ public class MainAppGUI extends JFrame {
 
         // Panel principal para botones de opciones
         JPanel panelOpciones = new JPanel(new GridLayout(0, 1));
+        JPanel panelEstado = new JPanel(new BorderLayout());
         // Pestañas para cada tabla de ficheros
         tabbedPane = new JTabbedPane();
         add(tabbedPane, BorderLayout.CENTER);
+        nombreFichero = new JLabel("Fichero cargado: Ninguno", SwingConstants.CENTER);
+        panelEstado.add(nombreFichero, BorderLayout.CENTER);
+        add(panelEstado, BorderLayout.NORTH);
 
         // Crear y añadir botones al panel de opciones
         JButton btnOpcion1 = new JButton("1. Crear un fichero .tsp aleatorio");
         JButton btnOpcion2 = new JButton("2. Cargar un dataset en memoria");
         JButton btnOpcion3 = new JButton("3. Comprobar estrategias");
-        JButton btnOpcion4 = new JButton("4. Comparar todas lasestrategias");
+        JButton btnOpcion4 = new JButton("4. Comparar todas las estrategias");
         JButton btnOpcion5 = new JButton("5. Comparar dos estrategias");
         JButton btnOpcion6 = new JButton("6. Comparar unidireccional vs bidireccional");
         JButton btnSalir = new JButton("Salir");
@@ -76,10 +81,12 @@ public class MainAppGUI extends JFrame {
             tabbedPane.removeAll();
             String tallaStr = JOptionPane.showInputDialog(this, "Introduce la talla del TSP:");
             talla = Integer.parseInt(tallaStr);
-            puntos.clear();
+            puntosDataset.clear();
             Punto p = new Punto();
-            v.rellenarPuntos(puntos, talla);
-            lec1.EscribirTSP(puntos, "Dataset(" + talla + ")");
+            v.rellenarPuntos(puntosDataset, talla);
+            lec1.EscribirTSP(puntosDataset, "Dataset(" + talla + ")");
+            fichero = "Dataset(" + talla + ")";
+            nombreFichero.setText("Fichero cargado: " + fichero);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error en la opción 1: " + e.getMessage());
         }
@@ -91,63 +98,89 @@ public class MainAppGUI extends JFrame {
             fichero = JOptionPane.showInputDialog(this, "Introduce el nombre del archivo:");
             Lectura lec = new Lectura(fichero + ".tsp");
             puntosDataset = lec.getPuntos();
+            nombreFichero.setText("Fichero cargado: " + fichero);
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Error en la opción 2: " + e.getMessage());
         }
 
     }
 
-private void ejecutarOpcion3() {
-    try {
-        
-         tabbedPane.removeAll();
-        // Crear panel principal
-        JPanel panelFichero = new JPanel(new BorderLayout());
+    private void ejecutarOpcion3() {
+        try {
+            // Limpiar las pestañas anteriores
+            tabbedPane.removeAll();
 
-        // Crear etiqueta con el nombre del fichero
-        JLabel labelFichero = new JLabel("Nombre del fichero: " + fichero, SwingConstants.CENTER);
-        panelFichero.add(labelFichero, BorderLayout.NORTH);
+            // Crear panel principal para la pestaña
+            JPanel panelFichero = new JPanel(new BorderLayout());
 
-        // Configurar tabla para mostrar datos
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Estrategia");
-        model.addColumn("Solución");
-        model.addColumn("Calculadas");
-        model.addColumn("Tiempo (ms)");
-        
-       
-        // Procesar datos y llenar la tabla
-        puntos = (ArrayList<Punto>) puntosDataset.clone();
-         inicio=r.nextInt(puntos.size()-1);
-        for (int i = 0; i < 4; i++) {
-            ArrayList<String[]> resultados = mv.opcion3(i, puntos,inicio);
+            // Crear etiqueta con el nombre del fichero
+            JLabel labelFichero = new JLabel("Nombre del fichero: " + fichero, SwingConstants.CENTER);
+            panelFichero.add(labelFichero, BorderLayout.NORTH);
+
+            // Configurar tabla para mostrar datos
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Estrategia");
+            model.addColumn("Solución");
+            model.addColumn("Calculadas");
+            model.addColumn("Tiempo (ms)");
+
+            // Procesar datos y llenar la tabla
             puntos = (ArrayList<Punto>) puntosDataset.clone();
+            inicio = r.nextInt(puntos.size() - 1);
+            for (int i = 0; i < 4; i++) {
+                ArrayList<String[]> resultados = mv.opcion3(i, puntos, inicio);
+                puntos = (ArrayList<Punto>) puntosDataset.clone();
 
-            // Agregar resultados al modelo de la tabla
+                // Agregar resultados al modelo de la tabla
+                for (String[] fila : resultados) {
+                    model.addRow(fila);
+                }
+            }
+
+            // Crear la tabla y añadirla al panel
+            JTable table = new JTable(model);
+            panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+
+            // Añadir el panel como una nueva pestaña
+            tabbedPane.addTab("Resultados de Opción 3", panelFichero);
+
+            // Actualizar la interfaz gráfica
+            revalidate();
+            repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error en la opción 3: " + e.getMessage());
+            e.printStackTrace(); // Mostrar detalles del error en la consola
+        }
+    }
+
+    private void ejecutarOpcion4() {
+        try {
+            tabbedPane.removeAll();
+
+            JPanel panelFichero = new JPanel(new BorderLayout());
+           
+            
+            
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Talla");
+            model.addColumn("UniDireccional Exhaustivo");
+            model.addColumn("Bidireccional Exhaustivo");
+            model.addColumn("Unidireccional Poda");
+            model.addColumn("Bidireccional Poda");
+
+            ArrayList<String[]> resultados = mv.opcion4();
             for (String[] fila : resultados) {
                 model.addRow(fila);
             }
+
+            JTable table = new JTable(model);
+            panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+            tabbedPane.addTab("Todas las Strats", panelFichero);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error en la opción 4: " + e.getMessage());
         }
-
-        // Crear la tabla y añadirla al panel
-        JTable table = new JTable(model);
-        panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
-
-
-        // Añadir el panel al contenedor principal
-        this.add(panelFichero, BorderLayout.CENTER);
-        this.revalidate(); // Actualizar la interfaz gráfica
-        this.repaint();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error en la opción 3: " + e.getMessage());
-        e.printStackTrace(); // Mostrar detalles del error en la consola
-    }
-}
-
-
-    private void ejecutarOpcion4() {
-
     }
 
     private void ejecutarOpcion5() {
