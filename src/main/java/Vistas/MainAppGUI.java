@@ -183,8 +183,51 @@ public class MainAppGUI extends JFrame {
         }
     }
 
-    private void ejecutarOpcion5() {
+    private void ejecutarOpcion5() {       
+        
+          try {
+            tabbedPane.removeAll();
 
+            // Paso 1: Seleccionar estrategias
+            String[] opciones = {"1 - Unidirecccional Exhaustivo", "2 - Bidireccional Exhaustivo", "3 - Unidireccional Poda", "4 - Bidireccional Poda"};
+            String opcionStr1 = (String) JOptionPane.showInputDialog(this, "Selecciona la primera estrategia:", "Comparación de Estrategias", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            String opcionStr2 = (String) JOptionPane.showInputDialog(this, "Selecciona la segunda estrategia:", "Comparación de Estrategias", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+            // Validar que el usuario seleccionó ambas estrategias
+            if (opcionStr1 == null || opcionStr2 == null || opcionStr1.equals(opcionStr2)) {
+                JOptionPane.showMessageDialog(this, "Debes seleccionar dos estrategias diferentes.");
+                return;
+            }
+
+            // Convertir las opciones seleccionadas a números de estrategia
+            int est1 = Integer.parseInt(opcionStr1.split(" ")[0]);
+            int est2 = Integer.parseInt(opcionStr2.split(" ")[0]);
+
+            JPanel panelFichero = new JPanel(new BorderLayout());
+            // Paso 2: Crear modelo para la tabla
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Talla");
+            model.addColumn(opcionStr1 + " - Tiempo (ms)");
+            model.addColumn("Distancias Calculadas");
+            model.addColumn(opcionStr2 + " - Tiempo (ms)");
+            model.addColumn("Distancias Calculadas");
+
+            // Paso 3: Ejecutar comparación para tallas de 500 a 5000
+            ArrayList<String[]> resultados = mv.opcion4();
+
+            for (String[] fila : resultados) {
+                model.addRow(fila);
+            }
+
+            // Mostrar resultados en un nuevo JFrame con JTable
+            JTable table = new JTable(model);
+            panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+            tabbedPane.addTab("Estrategia: " + opcionStr1 + " - " + opcionStr2, panelFichero);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error en la opción 4: " + e.getMessage());
+        }
+        
     }
 
     private void ejecutarOpcion6() {

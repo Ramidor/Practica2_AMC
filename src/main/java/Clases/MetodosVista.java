@@ -116,5 +116,46 @@ public class MetodosVista {
 
         return resultados;
     }
+    
+    public ArrayList<String[]> opcion5(ArrayList<Punto> puntos, boolean peorcaso, int est1, int est2) throws IOException {
+        int talla = 1000;
+        Punto p = new Punto();
+        Algoritmos a1 = new Algoritmos();
+        Algoritmos a2 = new Algoritmos();
+        ArrayList<String[]> resultados = new ArrayList<>();
+
+        while (talla <= 5000) {
+            puntos.clear();
+            v.rellenarPuntos(puntos, talla);
+
+            // Ejecutar y medir tiempo para la primera estrategia
+            long tiempoInicio1 = System.nanoTime();
+            CompararStrats(puntos, est1);
+            long tiempoFin1 = System.nanoTime();
+            long tiempoEjecucion1 = (tiempoFin1 - tiempoInicio1); // Convertir a ms
+            int distanciasCalculadas1 = a1.getCont();
+
+            // Ejecutar y medir tiempo para la segunda estrategia
+            long tiempoInicio2 = System.nanoTime();
+            CompararStrats(puntos, est2);
+            long tiempoFin2 = System.nanoTime();
+            long tiempoEjecucion2 = (tiempoFin2 - tiempoInicio2); // Convertir a ms
+            int distanciasCalculadas2 = a2.getCont();
+
+            // Agregar datos a la tabla
+            String[] fila = new String[]{
+                String.valueOf(talla), // Talla
+                String.format("%.4f", tiempoEjecucion1 / 1000000.0), // Tiempo
+                String.valueOf(distanciasCalculadas1), // Distancias
+                String.format("%.4f", tiempoEjecucion2 / 1000000.0), // Tiempo
+                String.valueOf(distanciasCalculadas2), // Distancias
+            };
+            resultados.add(fila);
+
+            talla += 1000; // Incrementar talla
+        }
+
+        return resultados;
+    }
 
 }
