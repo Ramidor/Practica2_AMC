@@ -20,7 +20,7 @@ public class MetodosVista {
     private ArrayList<Punto> ruta = new ArrayList<>();
     private Random r = new Random(System.currentTimeMillis());
 
-    public ArrayList<String[]> opcion3(int tipo, ArrayList<Punto> ciudades, int ini) {
+    public ArrayList<String[]> opcion3(int tipo, ArrayList<Punto> ciudades, int ini) throws IOException {
         ArrayList<String[]> resultados = new ArrayList<>();
         ArrayList<String> strats = new ArrayList<>();
         v.setCont();
@@ -49,6 +49,12 @@ public class MetodosVista {
         // Añadir la fila a la lista de resultados
         resultados.add(fila);
         Graficas.mostrarPuntosConRuta(ciudades, ruta, getEstrategias().get(tipo));
+        
+        Lectura lec=new Lectura();
+        lec.escribirTspRuta(ruta, getEstrategias().get(tipo), v.getRayas());
+        
+        
+        
         return resultados;
     }
 
@@ -59,6 +65,7 @@ public class MetodosVista {
         estrategias.add("Unidireccional con Poda");
         estrategias.add("Bidireccional con Poda");
 
+        
         return estrategias;
     }
 
@@ -183,8 +190,73 @@ public class MetodosVista {
             resultados.add(fila);
             talla += 1000; // Incrementar talla
         }
-        
-    
+
+        return resultados;
+    }
+
+    public ArrayList<String[]> opcion6(int estrategia) throws IOException {
+        ArrayList<Punto> puntos = new ArrayList<>();
+        int talla = 1000, vecesGanadasUni = 0, vecesGanadasBi = 0;
+        double experimentos = 10.0, distanciasCalculadas1 = 0, distanciasCalculadas2 = 0;
+        long Tejecucion1 = 0, Tejecucion2 = 0;
+
+        ArrayList<String[]> resultados = new ArrayList<>();
+
+        while (talla <= 5000) {
+            for (int i = 0; i < experimentos; i++) {
+                v.rellenarPuntos(puntos, talla);
+                ArrayList<Punto> puntosCopia = (ArrayList<Punto>) puntos.clone();
+                int ini = r.nextInt(puntos.size() - 1);
+                if (estrategia == 0) {
+                    inicio = System.currentTimeMillis();
+                    v.vorazUnidireccional(puntos, ini);
+                    fin = System.currentTimeMillis();
+                    distanciasCalculadas1 = v.getSolucion();
+                    Tejecucion1 += fin - inicio;
+
+                    inicio = System.currentTimeMillis();
+                    v.vorazBidireccional(puntos, ini);
+                    fin = System.currentTimeMillis();
+                    distanciasCalculadas2 = v.getSolucion();
+                    Tejecucion2 += fin - inicio;
+                } else if (estrategia == 1) {
+                    inicio = System.currentTimeMillis();
+                    v.vorazUnidireccionalPoda(puntos, ini);
+                    fin = System.currentTimeMillis();
+                    Tejecucion1 += fin - inicio;
+                    distanciasCalculadas1 = v.getSolucion();
+
+                    puntos = (ArrayList<Punto>) puntosCopia.clone();
+                    inicio = System.currentTimeMillis();
+                    v.vorazBidireccionalPoda(puntos, ini);
+                    fin = System.currentTimeMillis();
+                    distanciasCalculadas2 = v.getSolucion();
+                    Tejecucion2 += fin - inicio;
+                }
+                puntos.clear();
+                if (distanciasCalculadas1 <= distanciasCalculadas2) {
+                    vecesGanadasUni++;
+                } else {
+                    vecesGanadasBi++;
+                }
+
+            }
+            
+
+            String[] fila = new String[]{
+                String.valueOf(talla), // Talla
+                String.valueOf(vecesGanadasUni), // Tiempo
+                String.format("%.4f", Tejecucion1 / experimentos), // Tiempo
+                String.valueOf(vecesGanadasBi), // Tiempo
+                String.format("%.4f", Tejecucion2 / experimentos), // Tiempo
+            };
+            resultados.add(fila);
+            vecesGanadasBi = 0;
+            vecesGanadasUni = 0;
+
+            talla += 1000; // Incrementar talla
+        }
+
         return resultados;
     }
 

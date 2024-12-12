@@ -16,13 +16,14 @@ import java.util.Random;
 public class Voraces {
 
     private static int cont = 0;
-    private static float solucion = 0;
+    private static double solucion = 0.0;
+    private static ArrayList<Double> rayas = new ArrayList<>();
 
     public static void setSolucion() {
         Voraces.solucion = 0;
     }
 
-    public static float getSolucion() {
+    public static double getSolucion() {
         return solucion;
     }
 
@@ -32,6 +33,10 @@ public class Voraces {
 
     public static int getCont() {
         return cont;
+    }
+
+    public ArrayList<Double> getRayas() {
+        return rayas;
     }
 
     public static double distancia(Punto a, Punto b) {
@@ -44,6 +49,7 @@ public class Voraces {
     public static ArrayList<Punto> vorazUnidireccional(ArrayList<Punto> ciudades, int ini) {
         setCont();
         setSolucion();
+        rayas.clear();
         ArrayList<Punto> ruta = new ArrayList<>();
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
@@ -57,6 +63,7 @@ public class Voraces {
             double dist = distancia(ciudadActual, ciudades.get(posicion));
             cont++;
             solucion += dist;
+            rayas.add(dist);
             visitadas[posicion] = true;
             ruta.add(ciudades.get(posicion));
             ciudadActual = ciudades.get(posicion);
@@ -64,19 +71,20 @@ public class Voraces {
         double distanciafinal = distancia(ciudadActual, ciudades.get(ini));
         cont++;
         solucion += distanciafinal;
+        rayas.add(distanciafinal);
         ruta.add(ciudades.get(ini));
 
         return ruta;
     }
 
     public static ArrayList<Punto> vorazBidireccional(ArrayList<Punto> ciudades, int ini) {
-
+        rayas.clear();
         ArrayList<Punto> ruta = new ArrayList<>();
         setCont();
         setSolucion();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
-
+        double dd=0, di=0, distanciafinal=0;
         Punto inicio = ciudades.get(ini);
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
@@ -93,7 +101,7 @@ public class Voraces {
 
             double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
             double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-            //Preguntar raul si podemos meter el calculo de las distancias de alguna forma en los if para que solo hagamos un calculo de distancias
+            //Preguntar raul si podemos meter el calculo de las rayas de alguna forma en los if para que solo hagamos un calculo de rayas
             cont += 2;
             if (distanciaIzquierda <= distanciaDerecha) {
 
@@ -102,6 +110,8 @@ public class Voraces {
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
+                rayas.add(distanciaIzquierda);
+                di= distanciaIzquierda;
 
             } else {
 
@@ -110,9 +120,20 @@ public class Voraces {
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
+                rayas.add(distanciaDerecha);
+                dd= distanciaDerecha;
 
             }
         }
+        if (di <= dd) {
+            distanciafinal = distancia(inicio, extremoIzq);
+        }
+        else{
+            distanciafinal = distancia(inicio, extremoDer);
+        }
+        
+        rayas.add(distanciafinal);
+        solucion += distanciafinal;
 
         for (int i = 0; i < rutaIzquierda.size(); i++) {
             ruta.add(rutaIzquierda.get(i));
@@ -129,6 +150,9 @@ public class Voraces {
 
     public static ArrayList<Punto> vorazUnidireccionalPoda(ArrayList<Punto> ciudades, int ini) {
         ArrayList<Punto> ruta = new ArrayList<>();
+        setCont();
+        setSolucion();
+        rayas.clear();
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
 
@@ -136,9 +160,6 @@ public class Voraces {
         quicksort(ciudades, 0, ciudades.size() - 1);
 
         int ini2 = ciudades.indexOf(puntoIni);
-
-        setCont();
-        setSolucion();
 
         Punto ciudadActual = ciudades.get(ini2);
         visitadas[ini2] = true;
@@ -152,6 +173,7 @@ public class Voraces {
             double dist = distancia(ciudadActual, ciudades.get(posicion));
             cont++;
             solucion += dist;
+            rayas.add(dist);
             visitadas[posicion] = true;
             ciudadActual = ciudades.get(posicion);
             ruta.add(ciudadActual);
@@ -159,6 +181,7 @@ public class Voraces {
         double distanciafinal = distancia(ciudadActual, ciudades.get(ini2));
         cont++;
         solucion += distanciafinal;
+        rayas.add(distanciafinal);
         ruta.add(ciudades.get(ini2));
         // Cerrar el ciclo
         return ruta;
@@ -168,6 +191,8 @@ public class Voraces {
         ArrayList<Punto> ruta = new ArrayList<>();
         setCont();
         setSolucion();
+        rayas.clear();
+        double dd=0, di=0, distanciafinal=0;
         Punto puntoIni = ciudades.get(ini);
         quicksort(ciudades, 0, ciudades.size() - 1);
 
@@ -186,7 +211,6 @@ public class Voraces {
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
 
-        
         while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
             int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
             int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
@@ -201,6 +225,7 @@ public class Voraces {
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
+                rayas.add(distanciaIzquierda);
 
             } else {
                 // Añadir al final
@@ -209,8 +234,21 @@ public class Voraces {
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
+                rayas.add(distanciaDerecha);
             }
         }
+        if (di <= dd) {
+            distanciafinal = distancia(inicio, extremoIzq);
+            cont++;
+        }
+        else{
+            distanciafinal = distancia(inicio, extremoDer);
+            cont++;
+        }
+        
+        rayas.add(distanciafinal);
+        solucion += distanciafinal;
+
         for (int i = 0; i < rutaIzquierda.size(); i++) {
             ruta.add(rutaIzquierda.get(i));
         }

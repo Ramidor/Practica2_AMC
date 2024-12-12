@@ -159,9 +159,7 @@ public class MainAppGUI extends JFrame {
             tabbedPane.removeAll();
 
             JPanel panelFichero = new JPanel(new BorderLayout());
-           
-            
-            
+
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("Talla");
             model.addColumn("UniDireccional Exhaustivo");
@@ -183,9 +181,9 @@ public class MainAppGUI extends JFrame {
         }
     }
 
-    private void ejecutarOpcion5() {       
-        
-          try {
+    private void ejecutarOpcion5() {
+
+        try {
             tabbedPane.removeAll();
 
             // Paso 1: Seleccionar estrategias
@@ -211,7 +209,7 @@ public class MainAppGUI extends JFrame {
             model.addColumn("Distancias Calculadas");
             model.addColumn(opcionStr2 + " - Tiempo (ms)");
             model.addColumn("Distancias Calculadas");
-            
+
             // Paso 3: Ejecutar comparación para tallas de 500 a 5000
             ArrayList<String[]> resultados = mv.opcion5(est1, est2);
 
@@ -227,38 +225,43 @@ public class MainAppGUI extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error en la opción 5: " + e.getMessage());
         }
-        
+
     }
 
     private void ejecutarOpcion6() {
-           try {
+        try {
             tabbedPane.removeAll();
 
-            JPanel panelFichero = new JPanel(new BorderLayout());
-            // Paso 2: Crear modelo para la tabla
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("Talla");
-            model.addColumn( + " - Tiempo (ms)");
-            model.addColumn("Distancias Calculadas");
-            model.addColumn(opcionStr2 + " - Tiempo (ms)");
-            model.addColumn("Distancias Calculadas");
-            
-            // Paso 3: Ejecutar comparación para tallas de 500 a 5000
-            ArrayList<String[]> resultados = mv.opcion5(est1, est2);
+            for (int i = 0; i < 2; i++) {
+                JPanel panelFichero = new JPanel(new BorderLayout());
+                // Paso 2: Crear modelo para la tabla
+                DefaultTableModel model = new DefaultTableModel();
+                model.addColumn("Talla");
+                model.addColumn("Veces mejor Unidireccional");
+                model.addColumn("Tiempo (ms)");
+                model.addColumn("Veces mejor Bidireccional");
+                model.addColumn("Tiempo (ms)");
 
-            for (String[] fila : resultados) {
-                model.addRow(fila);
+                // Paso 3: Ejecutar comparación para tallas de 500 a 5000
+                ArrayList<String[]> resultados = mv.opcion6(i);
+
+                for (String[] fila : resultados) {
+                    model.addRow(fila);
+                }
+
+                // Mostrar resultados en un nuevo JFrame con JTable
+                JTable table = new JTable(model);
+                panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
+                if(i==0)
+                    tabbedPane.addTab("Estrategia: Exhaustivo", panelFichero);
+                else
+                   tabbedPane.addTab("Estrategia: Poda", panelFichero); 
             }
-
-            // Mostrar resultados en un nuevo JFrame con JTable
-            JTable table = new JTable(model);
-            panelFichero.add(new JScrollPane(table), BorderLayout.CENTER);
-            tabbedPane.addTab("Estrategia: " + opcionStr1 + " - " + opcionStr2, panelFichero);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error en la opción 5: " + e.getMessage());
         }
-     
+
     }
 
     public static void main(String[] args) throws FileNotFoundException {
