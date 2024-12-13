@@ -84,7 +84,7 @@ public class Voraces {
         setSolucion();
         ArrayList<Punto> rutaIzquierda = new ArrayList<>();
         ArrayList<Punto> rutaDerecha = new ArrayList<>();
-        double dd = 0, di = 0, distanciafinal = 0;
+        double distanciaIzquierda = 0, distanciaDerecha = 0, distanciaFinal = 0;
         Punto inicio = ciudades.get(ini);
         boolean[] visitadas = new boolean[ciudades.size()];
         Arrays.fill(visitadas, false);
@@ -95,53 +95,60 @@ public class Voraces {
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
 
+        // Almacena las ciudades más cercanas ya calculadas
+        int cercanaIzquierda = -1;
+        int cercanaDerecha = -1;
+
         while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
-            int cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
-            int cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
+            if (cercanaIzquierda == -1 || visitadas[cercanaIzquierda]) {
+                cercanaIzquierda = ciudadMasCercana(extremoIzq, ciudades, visitadas);
+                distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
+                cont++;
+            }
 
-            double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
-            double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-            //Preguntar raul si podemos meter el calculo de las rayas de alguna forma en los if para que solo hagamos un calculo de rayas
-            cont += 2;
+            if (cercanaDerecha == -1 || visitadas[cercanaDerecha]) {
+                cercanaDerecha = ciudadMasCercana(extremoDer, ciudades, visitadas);
+                distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
+                cont++;
+            }
+
             if (distanciaIzquierda <= distanciaDerecha) {
-
                 Punto izquierda = ciudades.get(cercanaIzquierda);
                 rutaIzquierda.add(izquierda);
                 visitadas[cercanaIzquierda] = true;
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
                 rayas.add(distanciaIzquierda);
-                di = distanciaIzquierda;
 
+                // Reinicia el cálculo para el siguiente más cercano a la izquierda
+                cercanaIzquierda = -1;
             } else {
-
                 Punto derecha = ciudades.get(cercanaDerecha);
                 rutaDerecha.add(derecha);
                 visitadas[cercanaDerecha] = true;
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
                 rayas.add(distanciaDerecha);
-                dd = distanciaDerecha;
 
+                // Reinicia el cálculo para el siguiente más cercano a la derecha
+                cercanaDerecha = -1;
             }
         }
-        if (di <= dd) {
-            distanciafinal = distancia(inicio, extremoIzq);
+
+        // Calcula la distancia final desde el último extremo al inicio
+        if (rutaIzquierda.size() > rutaDerecha.size()) {
+            distanciaFinal = distancia(inicio, extremoIzq);
         } else {
-            distanciafinal = distancia(inicio, extremoDer);
+            distanciaFinal = distancia(inicio, extremoDer);
         }
 
-        rayas.add(distanciafinal);
-        solucion += distanciafinal;
+        rayas.add(distanciaFinal);
+        solucion += distanciaFinal;
 
-        for (int i = 0; i < rutaIzquierda.size(); i++) {
-            ruta.add(rutaIzquierda.get(i));
-
-        }
-
+        // Construye la ruta final
+        ruta.addAll(rutaIzquierda);
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-
         }
 
         return ruta;
@@ -191,7 +198,7 @@ public class Voraces {
         setCont();
         setSolucion();
         rayas.clear();
-        double dd = 0, di = 0, distanciafinal = 0;
+        double distanciaIzquierda = 0, distanciaDerecha = 0, distanciaFinal = 0;
         Punto puntoIni = ciudades.get(ini);
         quicksort(ciudades, 0, ciudades.size() - 1);
 
@@ -210,13 +217,23 @@ public class Voraces {
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
 
-        while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
-            int cercanaIzquierda = ciudadMasCercanaPoda(extremoIzq, ciudades, visitadas);
-            int cercanaDerecha = ciudadMasCercanaPoda(extremoDer, ciudades, visitadas);
+        // Variables para almacenar las ciudades más cercanas calculadas
+        int cercanaIzquierda = -1;
+        int cercanaDerecha = -1;
 
-            double distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
-            double distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
-            cont += 2;
+        while (rutaIzquierda.size() + rutaDerecha.size() <= ciudades.size()) {
+            if (cercanaIzquierda == -1 || visitadas[cercanaIzquierda]) {
+                cercanaIzquierda = ciudadMasCercanaPoda(extremoIzq, ciudades, visitadas);
+                distanciaIzquierda = distancia(extremoIzq, ciudades.get(cercanaIzquierda));
+                cont++;
+            }
+
+            if (cercanaDerecha == -1 || visitadas[cercanaDerecha]) {
+                cercanaDerecha = ciudadMasCercanaPoda(extremoDer, ciudades, visitadas);
+                distanciaDerecha = distancia(extremoDer, ciudades.get(cercanaDerecha));
+                cont++;
+            }
+
             if (distanciaIzquierda <= distanciaDerecha) {
                 // Añadir al inicio
                 Punto izquierda = ciudades.get(cercanaIzquierda);
@@ -225,8 +242,9 @@ public class Voraces {
                 extremoIzq = izquierda;
                 solucion += distanciaIzquierda;
                 rayas.add(distanciaIzquierda);
-                di = distanciaIzquierda;
 
+                // Reinicia el cálculo para la siguiente iteración
+                cercanaIzquierda = -1;
             } else {
                 // Añadir al final
                 Punto derecha = ciudades.get(cercanaDerecha);
@@ -235,26 +253,26 @@ public class Voraces {
                 extremoDer = derecha;
                 solucion += distanciaDerecha;
                 rayas.add(distanciaDerecha);
-                dd = distanciaDerecha;
+
+                // Reinicia el cálculo para la siguiente iteración
+                cercanaDerecha = -1;
             }
         }
-        if (di <= dd) {
-            distanciafinal = distancia(inicio, extremoIzq);
-            cont++;
+
+        // Calcula la distancia final desde el último extremo al inicio
+        if (rutaIzquierda.size() > rutaDerecha.size()) {
+            distanciaFinal = distancia(inicio, extremoIzq);
         } else {
-            distanciafinal = distancia(inicio, extremoDer);
-            cont++;
+            distanciaFinal = distancia(inicio, extremoDer);
         }
+        cont++;
+        rayas.add(distanciaFinal);
+        solucion += distanciaFinal;
 
-        rayas.add(distanciafinal);
-        solucion += distanciafinal;
-
-        for (int i = 0; i < rutaIzquierda.size(); i++) {
-            ruta.add(rutaIzquierda.get(i));
-        }
+        // Construye la ruta final
+        ruta.addAll(rutaIzquierda);
         for (int i = rutaDerecha.size() - 1; i >= 0; i--) {
             ruta.add(rutaDerecha.get(i));
-
         }
 
         return ruta;

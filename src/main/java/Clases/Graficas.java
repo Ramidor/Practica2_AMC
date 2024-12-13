@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,54 +18,7 @@ import javax.swing.JScrollPane;
  */
 public class Graficas {
 
-    public static void mostrarPuntos(ArrayList<Punto> puntos) {
-        JFrame frame = new JFrame("Visualización de Puntos con IDs y Ejes");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 800);
 
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-
-                // Configuración básica
-                g2d.setColor(Color.BLUE);
-                double scaleX = getWidth() / 2000.0;
-                double scaleY = getHeight() / 2000.0;
-
-                // Dibujar ejes de coordenadas
-                g2d.setColor(Color.RED);
-                g2d.setStroke(new BasicStroke(2));
-                int originX = (int) (0 * scaleX);
-                int originY = getHeight() - (int) (0 * scaleY);
-
-                // Eje X
-                g2d.drawLine(0, originY, getWidth(), originY);
-                // Eje Y
-                g2d.drawLine(originX, 0, originX, getHeight());
-
-                // Dibujar puntos e IDs
-                g2d.setColor(Color.BLUE);
-                for (int i = 0; i < puntos.size(); i++) {
-                    Punto p = puntos.get(i);
-                    int x = (int) (p.getX() * scaleX);
-                    int y = getHeight() - (int) (p.getY() * scaleY);
-
-                    // Dibujar el punto
-                    g2d.fillOval(x - 3, y - 3, 6, 6);
-
-                    // Dibujar el ID del punto más cerca
-                    g2d.setColor(Color.RED);
-                    g2d.drawString(String.valueOf(i + 1), x + 2, y - 2);
-                    g2d.setColor(Color.BLUE);
-                }
-            }
-        };
-
-        frame.add(panel);
-        frame.setVisible(true);
-    }
 
     public static void mostrarPuntosConRuta(ArrayList<Punto> puntos, ArrayList<Punto> ruta, String estrategia) {
         JFrame frame = new JFrame(estrategia);
@@ -91,13 +44,14 @@ public class Graficas {
             this.puntos = puntos;
             this.ruta = ruta;
 
-            // Añadir listener para la rueda del ratón (zoom in/out)
-            addMouseWheelListener(new MouseWheelListener() {
+            // Añadir listener para las teclas + y -
+            setFocusable(true);
+            addKeyListener(new KeyAdapter() {
                 @Override
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                    if (e.getPreciseWheelRotation() < 0) {
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_ADD) {
                         zoomFactor *= 1.1; // Zoom in
-                    } else {
+                    } else if (e.getKeyCode() == KeyEvent.VK_MINUS || e.getKeyCode() == KeyEvent.VK_SUBTRACT) {
                         zoomFactor /= 1.1; // Zoom out
                     }
                     revalidate(); // Ajustar el tamaño preferido del panel
@@ -123,23 +77,9 @@ public class Graficas {
             // Configuración básica
             g2d.scale(zoomFactor, zoomFactor); // Aplicar zoom
             g2d.setColor(Color.BLUE);
-            double scaleX = getWidth() / 2000.0;
-            double scaleY = getHeight() / 2000.0;
-
-            // Dibujar ejes de coordenadas
-            g2d.setColor(Color.GRAY);
-            g2d.setStroke(new BasicStroke(2));
-            int originX = (int) (0 * scaleX);
-            int originY = getHeight() - (int) (0 * scaleY);
-
-            // Eje X
-            g2d.drawLine(0, originY, getWidth(), originY);
-            // Eje Y
-            g2d.drawLine(originX, 0, originX, getHeight());
 
             // Dibujar puntos e IDs
             g2d.setColor(Color.BLUE);
-
             for (Punto p : puntos) {
                 int x = (int) (p.getX());
                 int y = 2000 - (int) (p.getY()); // Coordenada Y invertida para la pantalla
@@ -169,6 +109,10 @@ public class Graficas {
 
                 if (i == 0) {
                     g2d.setColor(Color.GREEN);
+                    g2d.fillOval(x1 - 3, y1 - 3, 6, 6);
+                    g2d.setColor(Color.BLACK);
+                } else if (i == 1) {
+                    g2d.setColor(Color.MAGENTA);
                     g2d.fillOval(x1 - 3, y1 - 3, 6, 6);
                     g2d.setColor(Color.BLACK);
                 }
