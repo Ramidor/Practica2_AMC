@@ -2,12 +2,15 @@ package Clases;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
-
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -69,73 +72,107 @@ public class Graficas {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 800);
 
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
+        // Crear panel de dibujo con funcionalidad de zoom
+        ZoomablePanel panel = new ZoomablePanel(puntos, ruta);
+        JScrollPane scrollPane = new JScrollPane(panel);
 
-                // Configuración básica
-                g2d.setColor(Color.BLUE);
-                double scaleX = getWidth() / 2000.0;
-                double scaleY = getHeight() / 2000.0;
+        frame.add(scrollPane);
+        frame.setVisible(true);
+    }
 
-                // Dibujar ejes de coordenadas
-                g2d.setColor(Color.GRAY);
-                g2d.setStroke(new BasicStroke(2));
-                int originX = (int) (0 * scaleX);
-                int originY = getHeight() - (int) (0 * scaleY);
+    // Clase interna para el panel de dibujo con zoom
+    static class ZoomablePanel extends JPanel {
 
-                // Eje X
-                g2d.drawLine(0, originY, getWidth(), originY);
-                // Eje Y
-                g2d.drawLine(originX, 0, originX, getHeight());
+        private final ArrayList<Punto> puntos;
+        private final ArrayList<Punto> ruta;
+        private double zoomFactor = 1.0; // Factor de zoom inicial
 
-                // Dibujar puntos e IDs
-                g2d.setColor(Color.BLUE);
-                
-                for (Punto p : puntos) {
-                    int x = (int) (p.getX() * scaleX);
-                    int y = getHeight() - (int) (p.getY() * scaleY);
+        public ZoomablePanel(ArrayList<Punto> puntos, ArrayList<Punto> ruta) {
+            this.puntos = puntos;
+            this.ruta = ruta;
 
-                    // Dibujar el punto
-                    g2d.fillOval(x - 3, y - 3, 6, 6);
-                    
-
-                    // Dibujar el ID del punto más cerca
-                    g2d.setColor(Color.RED);
-                    g2d.drawString(String.valueOf(p.getId()), x + 2, y - 2);                   
-                    g2d.setColor(Color.BLUE);
-                    
-                }
-
-                // Dibujar líneas entre puntos según la ruta
-                g2d.setColor(Color.BLACK);
-                g2d.setStroke(new BasicStroke(1));
-                for (int i = 0; i < ruta.size() - 1; i++) {
-                    
-                    Punto p1 = ruta.get(i);
-                    Punto p2 = ruta.get(i + 1);
-                    int x = (int) (p1.getX() * scaleX);
-                    int y = getHeight() - (int) (p1.getY() * scaleY);
-
-                    int x1 = (int) (p1.getX() * scaleX);
-                    int y1 = getHeight() - (int) (p1.getY() * scaleY);
-                    int x2 = (int) (p2.getX() * scaleX);
-                    int y2 = getHeight() - (int) (p2.getY() * scaleY);
-
-                    g2d.drawLine(x1, y1, x2, y2);
-                    if (i==0) {
-                        g2d.setColor(Color.GREEN);
-                        g2d.fillOval(x - 3, y - 3, 6, 6);
-                        g2d.setColor(Color.BLACK);
+            // Añadir listener para la rueda del ratón (zoom in/out)
+            addMouseWheelListener(new MouseWheelListener() {
+                @Override
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                    if (e.getPreciseWheelRotation() < 0) {
+                        zoomFactor *= 1.1; // Zoom in
+                    } else {
+                        zoomFactor /= 1.1; // Zoom out
                     }
-                    
+                    revalidate(); // Ajustar el tamaño preferido del panel
+                    repaint();
+                }
+            });
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            // Ajustar el tamaño virtual del panel según el zoom
+            int baseSize = 2000; // Tamaño base para el rango de coordenadas
+            int width = (int) (baseSize * zoomFactor);
+            int height = (int) (baseSize * zoomFactor);
+            return new Dimension(width, height);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+
+            // Configuración básica
+            g2d.scale(zoomFactor, zoomFactor); // Aplicar zoom
+            g2d.setColor(Color.BLUE);
+            double scaleX = getWidth() / 2000.0;
+            double scaleY = getHeight() / 2000.0;
+
+            // Dibujar ejes de coordenadas
+            g2d.setColor(Color.GRAY);
+            g2d.setStroke(new BasicStroke(2));
+            int originX = (int) (0 * scaleX);
+            int originY = getHeight() - (int) (0 * scaleY);
+
+            // Eje X
+            g2d.drawLine(0, originY, getWidth(), originY);
+            // Eje Y
+            g2d.drawLine(originX, 0, originX, getHeight());
+
+            // Dibujar puntos e IDs
+            g2d.setColor(Color.BLUE);
+
+            for (Punto p : puntos) {
+                int x = (int) (p.getX());
+                int y = 2000 - (int) (p.getY()); // Coordenada Y invertida para la pantalla
+
+                // Dibujar el punto
+                g2d.fillOval(x - 3, y - 3, 6, 6);
+
+                // Dibujar el ID del punto más cerca
+                g2d.setColor(Color.RED);
+                g2d.drawString(String.valueOf(p.getId()), x + 2, y - 2);
+                g2d.setColor(Color.BLUE);
+            }
+
+            // Dibujar líneas entre puntos según la ruta
+            g2d.setColor(Color.BLACK);
+            g2d.setStroke(new BasicStroke(1));
+            for (int i = 0; i < ruta.size() - 1; i++) {
+                Punto p1 = ruta.get(i);
+                Punto p2 = ruta.get(i + 1);
+
+                int x1 = (int) (p1.getX());
+                int y1 = 2000 - (int) (p1.getY());
+                int x2 = (int) (p2.getX());
+                int y2 = 2000 - (int) (p2.getY());
+
+                g2d.drawLine(x1, y1, x2, y2);
+
+                if (i == 0) {
+                    g2d.setColor(Color.GREEN);
+                    g2d.fillOval(x1 - 3, y1 - 3, 6, 6);
+                    g2d.setColor(Color.BLACK);
                 }
             }
-        };
-
-        frame.add(panel);
-        frame.setVisible(true);
+        }
     }
 }
