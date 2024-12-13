@@ -301,10 +301,10 @@ public class Voraces {
         double x, y, aux1;
         Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < n; i++) {
-            num = r.nextInt(1, 4000); //genera un número aleatorio entre 1 y 4000
+            num = r.nextInt(1, 10000); //genera un número aleatorio entre 1 y 4000
             den = r.nextInt(17) + 7; //genera un aleatorio entre 7 y 17
             x = num / ((double) den + 0.37); //division con decimales
-            y = (r.nextInt(1, 4000)) / ((double) (r.nextInt(7, 17)) + 0.37);
+            y = (r.nextInt(1, 10000)) / ((double) (r.nextInt(7, 17)) + 0.37);
             p.add(new Punto(i + 1, x, y));
         }
 
