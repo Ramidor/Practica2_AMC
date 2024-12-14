@@ -95,7 +95,6 @@ public class Voraces {
         Punto extremoIzq = inicio;
         Punto extremoDer = inicio;
 
-        // Almacena las ciudades más cercanas ya calculadas
         int cercanaIzquierda = -1;
         int cercanaDerecha = -1;
 
@@ -120,7 +119,6 @@ public class Voraces {
                 solucion += distanciaIzquierda;
                 rayas.add(distanciaIzquierda);
 
-                // Reinicia el cálculo para el siguiente más cercano a la izquierda
                 cercanaIzquierda = -1;
             } else {
                 Punto derecha = ciudades.get(cercanaDerecha);
@@ -295,12 +293,15 @@ public class Voraces {
         return posicion;
     }
 
-    private static int ciudadMasCercanaPoda(Punto origen, ArrayList<Punto> ciudades, boolean[] visitadas) {
-        int posicion = -1;
-        double minima = Double.MAX_VALUE;
+private static int ciudadMasCercanaPoda(Punto origen, ArrayList<Punto> ciudades, boolean[] visitadas) {
+    int posicion = -1;
+    double minima = Double.MAX_VALUE;
 
-        for (int i = 0; i < ciudades.size(); i++) {
-            if (!visitadas[i] && Math.abs(origen.getX() - ciudades.get(i).getX()) < minima) {
+    for (int i = 0; i < ciudades.size(); i++) {
+        if (!visitadas[i]) {
+            // Poda respecto al eje X
+            if (Math.abs(origen.getX() - ciudades.get(i).getX()) < minima) {
+                // Calcula la distancia solo si pasa la poda
                 double distancia = distancia(origen, ciudades.get(i));
                 cont++;
 
@@ -310,9 +311,11 @@ public class Voraces {
                 }
             }
         }
-
-        return posicion;
     }
+
+    return posicion;
+}
+
 
     public void rellenarPuntos(ArrayList<Punto> p, int n) {
         int num, den;

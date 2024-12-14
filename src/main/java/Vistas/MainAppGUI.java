@@ -3,7 +3,6 @@ package Vistas;
 import Clases.Lectura;
 import Clases.MetodosVista;
 import Clases.Punto;
-import Clases.PuntosMin;
 import Clases.Voraces;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
