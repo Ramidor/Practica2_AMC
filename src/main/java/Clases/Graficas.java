@@ -76,7 +76,6 @@ public class Graficas {
 
             // Configuración básica
             g2d.scale(zoomFactor, zoomFactor); // Aplicar zoom
-            g2d.setColor(Color.BLUE);
 
             // Dibujar puntos e IDs
             g2d.setColor(Color.BLUE);

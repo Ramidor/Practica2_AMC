@@ -142,13 +142,13 @@ public class MetodosVista {
                 tiempoInicio1 = System.currentTimeMillis();
                 if (est1 == 1) {
                     ruta = v.vorazUnidireccional(puntos, ini);
-                }
+                }else
                 if (est1 == 2) {
                     ruta = v.vorazBidireccional(puntos, ini);
-                }
+                }else
                 if (est1 == 3) {
                     ruta = v.vorazUnidireccionalPoda(puntos, ini);
-                }
+                }else
                 if (est1 == 4) {
                     ruta = v.vorazBidireccionalPoda(puntos, ini);
                 }
@@ -160,13 +160,13 @@ public class MetodosVista {
                 tiempoInicio1 = System.currentTimeMillis();
                 if (est2 == 1) {
                     ruta = v.vorazUnidireccional(puntos, ini);
-                }
+                }else
                 if (est2 == 2) {
                     ruta = v.vorazBidireccional(puntos, ini);
-                }
+                }else
                 if (est2 == 3) {
                     ruta = v.vorazUnidireccionalPoda(puntos, ini);
-                }
+                }else
                 if (est2 == 4) {
                     ruta = v.vorazBidireccionalPoda(puntos, ini);
                 }
